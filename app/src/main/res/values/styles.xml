@@ -8,4 +8,33 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.TextAppearance.Large" parent="TextAppearance.AppCompat.Large"/>
+    <style name="AppTheme.TextAppearance.Large.Inverse" parent="TextAppearance.AppCompat.Large.Inverse"/>
+
+    <style name="AppTheme.TextAppearance.Small" parent="TextAppearance.AppCompat.Small"/>
+    <style name="AppTheme.TextAppearance.Small.Inverse" parent="TextAppearance.AppCompat.Small.Inverse"/>
+
+    <style name="AppTheme.TextAppearance.Medium" parent="TextAppearance.AppCompat.Medium"/>
+    <style name="AppTheme.TextAppearance.Medium.Inverse" parent="TextAppearance.AppCompat.Medium.Inverse"/>
+
+    <style name="AppTheme.TextAppearance.Huge" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:textSize">36sp</item>
+    </style>
+    <style name="AppTheme.TextAppearance.Huge.Inverse" parent="AppTheme.TextAppearance.Huge">
+        <item name="android:textColor">@color/textColorPrimaryInverse</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.Transparent" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@color/transparent</item>
+    </style>
+
 </resources>
