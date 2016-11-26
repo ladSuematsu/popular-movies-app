@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Popular Movies App</string>
+    <string name="empty_content">no content.</string>
 </resources>
