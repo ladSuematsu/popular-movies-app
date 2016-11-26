@@ -1,0 +1,4 @@
+<resources>
+    <string name="movie_discovery_data_load_error">Error loading movie data</string>
+    <string name="movie_discovery_ok">OK</string>
+</resources>
