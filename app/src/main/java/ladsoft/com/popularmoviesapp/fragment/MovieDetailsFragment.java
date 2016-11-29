@@ -49,6 +49,13 @@ public class MovieDetailsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().onBackPressed();
+            }
+        });
+
         binding.completeTitle.setText(movie.getOriginalTitle());
         binding.synopsis.setText(movie.getOverview());
         binding.userRating.setText(String.valueOf(movie.getVoteAverage()));
