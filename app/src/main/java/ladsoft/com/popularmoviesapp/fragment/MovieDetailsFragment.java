@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+
 import ladsoft.com.popularmoviesapp.R;
 import ladsoft.com.popularmoviesapp.databinding.FragmentMovieDetailsBinding;
 import ladsoft.com.popularmoviesapp.model.Movie;
@@ -59,5 +62,11 @@ public class MovieDetailsFragment extends Fragment {
         binding.completeTitle.setText(movie.getOriginalTitle());
         binding.synopsis.setText(movie.getOverview());
         binding.userRating.setText(String.valueOf(movie.getVoteAverage()));
+
+        Glide.with(this)
+                .load(movie.getPosterPath())
+                .fitCenter()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(binding.appBarImage);
     }
 }
