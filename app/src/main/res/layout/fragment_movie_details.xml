@@ -12,12 +12,11 @@
         android:layout_height="192dp"
         android:layout_width="match_parent"
         android:theme="@style/AppTheme.AppBarOverlay">
-
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:toolbarId="@+id/toolbar"
-            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
+            app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed"
             app:layout_scrollInterpolator="@android:anim/decelerate_interpolator"
             app:contentScrim="?attr/colorPrimary"
             android:theme="@style/AppTheme.AppBarOverlay">
@@ -72,14 +71,18 @@
                     android:id="@+id/user_rating"
                     android:text="@string/empty_content"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    />
 
                 <TextView
                     android:id="@+id/synopsis_label"
                     android:text="@string/movie_details_synopsis_label"
+                    android:textAppearance="@style/AppTheme.TextAppearance.Medium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/AppTheme.TextAppearance.Medium" />
+                    android:layout_marginTop="@dimen/default_margin"
+
+                    />
                 <TextView
                     android:id="@+id/synopsis"
                     android:layout_width="match_parent"

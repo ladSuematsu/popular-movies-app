@@ -18,7 +18,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_movie_details);
 
         if (savedInstanceState == null) {
             Movie movie = getIntent().getParcelableExtra(EXTRA_MOVIE);

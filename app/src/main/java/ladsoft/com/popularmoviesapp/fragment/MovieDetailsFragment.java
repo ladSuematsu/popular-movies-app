@@ -51,6 +51,6 @@ public class MovieDetailsFragment extends Fragment {
 
         binding.completeTitle.setText(movie.getOriginalTitle());
         binding.synopsis.setText(movie.getOverview());
-        binding.userRating.setText(movie.getVoteAverage());
+        binding.userRating.setText(String.valueOf(movie.getVoteAverage()));
     }
 }
