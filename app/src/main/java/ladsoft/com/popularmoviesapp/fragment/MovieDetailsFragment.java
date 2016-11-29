@@ -59,13 +59,14 @@ public class MovieDetailsFragment extends Fragment {
             }
         });
 
-        binding.completeTitle.setText(movie.getOriginalTitle());
+        binding.completeTitle.setText(movie.getTitle());
         binding.synopsis.setText(movie.getOverview());
         binding.userRating.setText(String.valueOf(movie.getVoteAverage()));
 
         Glide.with(this)
                 .load(movie.getPosterPath())
-                .fitCenter()
+                .centerCrop()
+                .placeholder(android.R.drawable.sym_def_app_icon)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(binding.appBarImage);
     }

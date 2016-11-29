@@ -47,6 +47,7 @@ public class MovieDiscoveryAdapter<T extends Movie> extends RecyclerView.Adapter
             .load(movie.getPosterPath())
             .fitCenter()
             .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .placeholder(android.R.drawable.sym_def_app_icon)
             .into(binding.poster);
     }
 

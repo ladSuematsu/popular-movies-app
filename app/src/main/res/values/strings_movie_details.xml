@@ -2,5 +2,6 @@
 <resources>
     <string name="movie_details_synopsis_label">Synopsis</string>
     <string name="movie_details_user_rating_label">User rating</string>
-    <string name="movie_details_title_label">Movie details</string>
+    <string name="movie_details_title_label">Title</string>
+    <string name="movie_details_toolbar_title">Movie details</string>
 </resources>
