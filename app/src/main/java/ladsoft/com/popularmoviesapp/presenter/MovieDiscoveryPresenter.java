@@ -10,7 +10,7 @@ public interface MovieDiscoveryPresenter<T> {
     void loadData();
 
     interface Callback<T> {
-        void onDataLoaded(List<T> movies);
+        void onDataLoaded(T movies);
         void onPresenterError(ErrorType errorType);
     }
 }

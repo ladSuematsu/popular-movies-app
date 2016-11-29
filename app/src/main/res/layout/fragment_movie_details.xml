@@ -9,7 +9,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:fitsSystemWindows="true"
-        android:layout_height="192dp"
+        android:layout_height="320dp"
         android:layout_width="match_parent"
         android:theme="@style/AppTheme.AppBarOverlay">
         <android.support.design.widget.CollapsingToolbarLayout
@@ -21,14 +21,13 @@
             app:contentScrim="?attr/colorPrimary"
             app:titleEnabled="true"
             app:expandedTitleTextAppearance="@style/AppTheme.TextAppearance.Transparent"
-            app:title="@string/movie_details_title_label"
+            app:title="@string/movie_details_toolbar_title"
             android:theme="@style/AppTheme.AppBarOverlay"
             >
             <ImageView
                 android:id="@+id/app_bar_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@android:drawable/sym_def_app_icon"
                 android:scaleType="centerCrop" />
 
             <android.support.v7.widget.Toolbar
@@ -56,9 +55,11 @@
                 <TextView
                     android:id="@+id/complete_title_label"
                     android:text="@string/movie_details_title_label"
+                    android:textAppearance="@style/AppTheme.TextAppearance.Medium"
+                    android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/AppTheme.TextAppearance.Medium" />
+                    />
                 <TextView
                     android:id="@+id/complete_title"
                     android:layout_width="match_parent"
@@ -83,6 +84,7 @@
                     android:id="@+id/synopsis_label"
                     android:text="@string/movie_details_synopsis_label"
                     android:textAppearance="@style/AppTheme.TextAppearance.Medium"
+                    android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_margin"

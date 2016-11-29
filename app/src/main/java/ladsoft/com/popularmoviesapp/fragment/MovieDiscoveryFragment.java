@@ -20,13 +20,14 @@ import java.util.List;
 import ladsoft.com.popularmoviesapp.R;
 import ladsoft.com.popularmoviesapp.activity.MovieDetailsActivity;
 import ladsoft.com.popularmoviesapp.adapter.MovieDiscoveryAdapter;
+import ladsoft.com.popularmoviesapp.api.parser.MovieSearchResult;
 import ladsoft.com.popularmoviesapp.databinding.FragmentMainBinding;
 import ladsoft.com.popularmoviesapp.model.Movie;
 import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryPresenter;
 import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryPresenterFactory;
 import ladsoft.com.popularmoviesapp.util.UiUtils;
 
-public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryPresenter.Callback<Movie>,MovieDiscoveryAdapter.Callback<Movie> {
+public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryPresenter.Callback<MovieSearchResult>,MovieDiscoveryAdapter.Callback<Movie> {
 
     private FragmentMainBinding binding;
     private MovieDiscoveryPresenter<Movie> presenter;
@@ -69,8 +70,8 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryPr
     }
 
     @Override
-    public void onDataLoaded(List<Movie> movies) {
-        adapter.setDataSource(movies);
+    public void onDataLoaded(MovieSearchResult movies) {
+        adapter.setDataSource(movies.getResult());
     }
 
     @Override
