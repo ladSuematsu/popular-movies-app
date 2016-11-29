@@ -1,6 +1,7 @@
 package ladsoft.com.popularmoviesapp.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.view.WindowManager;
 import java.util.List;
 
 import ladsoft.com.popularmoviesapp.R;
+import ladsoft.com.popularmoviesapp.activity.MovieDetailsActivity;
 import ladsoft.com.popularmoviesapp.adapter.MovieDiscoveryAdapter;
 import ladsoft.com.popularmoviesapp.databinding.FragmentMainBinding;
 import ladsoft.com.popularmoviesapp.model.Movie;
@@ -73,7 +75,9 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryPr
 
     @Override
     public void onItemClick(Movie movie) {
-
+        Intent intent = new Intent(getContext(), MovieDetailsActivity.class);
+        intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE, movie);
+        startActivity(intent);
     }
 
     @Override
