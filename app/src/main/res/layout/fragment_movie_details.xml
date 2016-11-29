@@ -55,9 +55,11 @@
                 <TextView
                     android:id="@+id/complete_title_label"
                     android:text="@string/movie_details_title_label"
+                    android:textAppearance="@style/AppTheme.TextAppearance.Medium"
+                    android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/AppTheme.TextAppearance.Medium" />
+                    />
                 <TextView
                     android:id="@+id/complete_title"
                     android:layout_width="match_parent"
@@ -82,6 +84,7 @@
                     android:id="@+id/synopsis_label"
                     android:text="@string/movie_details_synopsis_label"
                     android:textAppearance="@style/AppTheme.TextAppearance.Medium"
+                    android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_margin"

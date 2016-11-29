@@ -66,7 +66,7 @@ public class MovieDetailsFragment extends Fragment {
         Glide.with(this)
                 .load(movie.getPosterPath())
                 .centerCrop()
-                .placeholder(android.R.drawable.sym_def_app_icon)
+                .placeholder(R.drawable.ic_movie_white)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(binding.appBarImage);
     }
