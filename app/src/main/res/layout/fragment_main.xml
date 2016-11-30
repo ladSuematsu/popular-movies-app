@@ -11,16 +11,40 @@
             android:theme="@style/AppTheme.AppBarOverlay">
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
                     android:background="@color/transparent"
+                    android:theme="@style/AppTheme.AppBarOverlay"
                     app:popupTheme="@style/AppTheme.PopupOverlay"
-                    app:title="@string/app_name"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_scrollFlags="scroll|enterAlways">
+                    <RelativeLayout android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        >
+                        <TextView android:id="@+id/title"
+                            android:text="@string/app_name"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            />
+                        <TextView android:id="@+id/sort_by_selector_label"
+                            android:text="@string/movie_discovery_sort_by"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle"
+                            android:layout_below="@id/title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            />
+                        <Spinner android:id="@+id/sort_by_selector"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/sort_by_selector_label"
+                            android:layout_below="@id/title"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle"
+                            />
+                    </RelativeLayout>
+            </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v7.widget.RecyclerView android:id="@+id/forecast_list"
+        <android.support.v7.widget.RecyclerView android:id="@+id/movie_discovery_list"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

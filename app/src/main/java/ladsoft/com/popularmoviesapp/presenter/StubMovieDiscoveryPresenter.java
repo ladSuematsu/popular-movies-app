@@ -19,7 +19,7 @@ public class StubMovieDiscoveryPresenter implements MovieDiscoveryPresenter<Movi
     }
 
     @Override
-    public void loadData() {
+    public void loadData(int sortType) {
         movies = new ArrayList<>();
 
         Movie movie = new Movie("/kqjL17yufvn9OVLyXYpvtyrFfak.jpg", false,

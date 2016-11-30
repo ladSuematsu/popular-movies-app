@@ -7,13 +7,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.view.menu.ExpandedMenuView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.ScrollingTabContainerView;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import java.util.List;
 
@@ -57,8 +61,23 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryPr
                 ? 2 : 3;
 
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), listSpan);
-        binding.forecastList.setLayoutManager(layoutManager);
-        binding.forecastList.setAdapter(adapter);
+        binding.movieDiscoveryList.setLayoutManager(layoutManager);
+        binding.movieDiscoveryList.setAdapter(adapter);
+
+        ArrayAdapter sortSelectorAdapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.movie_discovery_sort_selector_options, android.R.layout.simple_spinner_dropdown_item);
+        binding.sortBySelector.setAdapter(sortSelectorAdapter);
+        binding.sortBySelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                adapter.clearData();
+                presenter.loadData(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
     }
 
     @Override
@@ -66,7 +85,7 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryPr
         super.onActivityCreated(savedInstanceState);
 
         presenter = MovieDiscoveryPresenterFactory.create(this);
-        presenter.loadData();
+//        presenter.loadData();
     }
 
     @Override
