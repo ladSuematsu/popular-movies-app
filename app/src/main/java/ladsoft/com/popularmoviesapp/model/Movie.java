@@ -47,7 +47,7 @@ public class Movie implements Parcelable {
     @Expose @SerializedName("popularity") private double popularity;
     @Expose @SerializedName("vote_count") private long voteCount;
     @Expose @SerializedName("video") private boolean video;
-    @Expose @SerializedName("vote_average") private int voteAverage;
+    @Expose @SerializedName("vote_average") private double voteAverage;
 
     protected Movie(Parcel in) {
         posterPath = in.readString();
@@ -62,7 +62,7 @@ public class Movie implements Parcelable {
         popularity = in.readDouble();
         voteCount = in.readLong();
         video = in.readByte() != 0;
-        voteAverage = in.readInt();
+        voteAverage = in.readDouble();
     }
 
     @Override
@@ -79,7 +79,7 @@ public class Movie implements Parcelable {
         dest.writeDouble(popularity);
         dest.writeLong(voteCount);
         dest.writeByte((byte) (video ? 1 : 0));
-        dest.writeInt(voteAverage);
+        dest.writeDouble(voteAverage);
     }
 
     @Override
@@ -141,7 +141,7 @@ public class Movie implements Parcelable {
         return video;
     }
 
-    public int getVoteAverage() {
+    public double getVoteAverage() {
         return voteAverage;
     }
 
