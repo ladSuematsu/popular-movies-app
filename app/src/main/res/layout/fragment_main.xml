@@ -28,17 +28,18 @@
                             />
                         <TextView android:id="@+id/sort_by_selector_label"
                             android:text="@string/movie_discovery_sort_by"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle"
+                            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
                             android:layout_below="@id/title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             />
                         <Spinner android:id="@+id/sort_by_selector"
+                            android:popupTheme="@style/AppTheme.PopupOverlay"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_toRightOf="@id/sort_by_selector_label"
                             android:layout_below="@id/title"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle"
+                            android:layout_alignBottom="@id/sort_by_selector_label"
                             />
                     </RelativeLayout>
             </android.support.v7.widget.Toolbar>
