@@ -2,6 +2,7 @@ package ladsoft.com.popularmoviesapp.adapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,8 +61,13 @@ public class MovieDiscoveryAdapter<T extends Movie> extends RecyclerView.Adapter
     @Override
     public long getItemId(int position) { return dataSource.get(position).getId(); }
 
-    public void setDataSource(List<T> dataSource) {
+    public void setDataSource(@NonNull List<T> dataSource) {
         this.dataSource = dataSource;
+        this.notifyDataSetChanged();
+    }
+
+    public void clearData() {
+        this.dataSource.clear();
         this.notifyDataSetChanged();
     }
 

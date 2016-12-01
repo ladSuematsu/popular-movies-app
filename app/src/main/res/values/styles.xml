@@ -47,4 +47,8 @@
         <item name="android:textColor">@color/transparent</item>
     </style>
 
+    <style name="AppTheme.Spinner" parent="AppTheme">
+        <item name="colorControlNormal">@color/textColorPrimaryInverse</item>
+    </style>
+
 </resources>

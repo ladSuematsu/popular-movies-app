@@ -2,20 +2,22 @@ package ladsoft.com.popularmoviesapp.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-
-import java.util.List;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import ladsoft.com.popularmoviesapp.R;
 import ladsoft.com.popularmoviesapp.activity.MovieDetailsActivity;
@@ -53,12 +55,28 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryPr
 
         WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         int rotation = windowManager.getDefaultDisplay().getRotation();
-        int listSpan = rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_270
+        int listSpan = rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180
                 ? 2 : 3;
 
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), listSpan);
-        binding.forecastList.setLayoutManager(layoutManager);
-        binding.forecastList.setAdapter(adapter);
+        binding.movieDiscoveryList.setLayoutManager(layoutManager);
+        binding.movieDiscoveryList.setAdapter(adapter);
+
+        ArrayAdapter sortSelectorAdapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.movie_discovery_sort_selector_options, R.layout.spinner_item_inverse);
+        sortSelectorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.sortBySelector.setAdapter(sortSelectorAdapter);
+        binding.sortBySelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                adapter.clearData();
+                presenter.loadData(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
     }
 
     @Override
@@ -66,7 +84,6 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryPr
         super.onActivityCreated(savedInstanceState);
 
         presenter = MovieDiscoveryPresenterFactory.create(this);
-        presenter.loadData();
     }
 
     @Override

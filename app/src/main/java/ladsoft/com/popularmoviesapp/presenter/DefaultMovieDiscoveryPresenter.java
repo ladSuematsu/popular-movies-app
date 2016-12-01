@@ -1,5 +1,7 @@
 package ladsoft.com.popularmoviesapp.presenter;
 
+import android.util.Log;
+
 import ladsoft.com.popularmoviesapp.BuildConfig;
 import ladsoft.com.popularmoviesapp.api.TheMovieDbApi;
 import ladsoft.com.popularmoviesapp.api.TheMovieDbApiModule;
@@ -9,6 +11,7 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class DefaultMovieDiscoveryPresenter implements MovieDiscoveryPresenter<Movie> {
+    private static final String TAG = DefaultMovieDiscoveryPresenter.class.getSimpleName();
     private final Callback<MovieSearchResult> presenterCallback;
     private final TheMovieDbApi api;
     private final String apiKey = BuildConfig.API_KEY;
@@ -20,8 +23,18 @@ public class DefaultMovieDiscoveryPresenter implements MovieDiscoveryPresenter<M
     }
 
     @Override
-    public void loadData() {
-        Call<MovieSearchResult> call = api.getMovies(apiKey, TheMovieDbApi.SORT_CRITERIA_POPULARITY);
+    public void loadData(int sortType) {
+        String sortCriteria;
+        switch(sortType) {
+            case SORT_TYPE_HIGHEST_RATED:
+                sortCriteria = TheMovieDbApi.SORT_CRITERIA_HIGHEST_RATED;
+                break;
+            case SORT_TYPE_MOST_POPULAR:
+            default:
+                sortCriteria = TheMovieDbApi.SORT_CRITERIA_MOST_POPULAR;
+        }
+
+        Call<MovieSearchResult> call = api.getMovies(sortCriteria, apiKey);
         call.enqueue(callback);
     }
 
@@ -39,6 +52,7 @@ public class DefaultMovieDiscoveryPresenter implements MovieDiscoveryPresenter<M
 
         @Override
         public void onFailure(Call<MovieSearchResult> call, Throwable t) {
+            Log.e(TAG, t.getLocalizedMessage(), t);
             presenterCallback.onPresenterError(ErrorType.DATA_LOAD_ERROR);
         }
     };
