@@ -3,7 +3,7 @@
     <string name="movie_discovery_ok">OK</string>
     <string name="movie_discovery_sort_by">Sort by</string>
     <string name="movie_discovery_sort_option_most_popular">Most Popular</string>
-    <string name="movie_discovery_sort_option_highest_rated">HighestRated</string>
+    <string name="movie_discovery_sort_option_highest_rated">Highest Rated</string>
 
     <string-array name="movie_discovery_sort_selector_options">
         <item>@string/movie_discovery_sort_option_most_popular</item>
