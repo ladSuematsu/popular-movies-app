@@ -7,4 +7,5 @@
     <string name="movie_details_release_year_label">Release year</string>
     <string name="movie_details_title_label">Title</string>
     <string name="movie_details_toolbar_title">Movie details</string>
+    <string name="movie_details_show_full_poster">Show poster</string>
 </resources>
