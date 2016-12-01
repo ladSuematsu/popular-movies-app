@@ -21,14 +21,44 @@
             app:contentScrim="?attr/colorPrimary"
             app:titleEnabled="true"
             app:expandedTitleTextAppearance="@style/AppTheme.TextAppearance.Transparent"
-            app:title="@string/movie_details_toolbar_title"
             android:theme="@style/AppTheme.AppBarOverlay"
             >
             <ImageView
                 android:id="@+id/app_bar_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                />
+
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="@dimen/default_margin"
+                android:layout_marginLeft="@dimen/default_margin"
+                android:layout_marginStart="@dimen/default_margin"
+                android:orientation="vertical">
+                <TextView android:id="@+id/complete_title_appbar"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="@string/empty_content"
+                    android:textAppearance="@style/AppTheme.TextAppearance.Huge.Inverse"
+                    android:shadowColor="@color/textShadow"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="2"
+                    />
+                <TextView android:id="@+id/year_appbar"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="@string/empty_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:shadowColor="@color/textShadow"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="2"
+                    />
+            </LinearLayout>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -67,12 +97,28 @@
                     android:text="@string/empty_content" />
 
                 <TextView
+                    android:id="@+id/year_label"
+                    android:text="@string/movie_details_release_year_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:textAppearance="@style/AppTheme.TextAppearance.Medium"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/year"
+                    android:text="@string/empty_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
                     android:id="@+id/user_rating_label"
                     android:text="@string/movie_details_user_rating_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_margin"
-                    android:textStyle="bold" />
+                    android:textAppearance="@style/AppTheme.TextAppearance.Medium"
+                    android:textStyle="bold"/>
                 <TextView
                     android:id="@+id/user_rating"
                     android:text="@string/empty_content"
