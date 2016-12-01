@@ -1,0 +1,54 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="AppTheme.CardView" parent="CardView">
+        <item name="cardCornerRadius">2dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="contentPaddingBottom">8dp</item>
+        <item name="contentPaddingTop">8dp</item>
+        <item name="contentPaddingLeft">8dp</item>
+        <item name="contentPaddingRight">8dp</item>
+        <item name="cardBackgroundColor">@android:color/white</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.Large" parent="TextAppearance.AppCompat.Large"/>
+    <style name="AppTheme.TextAppearance.Large.Inverse" parent="TextAppearance.AppCompat.Large.Inverse"/>
+
+    <style name="AppTheme.TextAppearance.Small" parent="TextAppearance.AppCompat.Small"/>
+    <style name="AppTheme.TextAppearance.Small.Inverse" parent="TextAppearance.AppCompat.Small.Inverse"/>
+
+    <style name="AppTheme.TextAppearance.Medium" parent="TextAppearance.AppCompat.Medium"/>
+    <style name="AppTheme.TextAppearance.Medium.Inverse" parent="TextAppearance.AppCompat.Medium.Inverse"/>
+
+    <style name="AppTheme.TextAppearance.Huge" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:textSize">36sp</item>
+    </style>
+    <style name="AppTheme.TextAppearance.Huge.Inverse" parent="AppTheme.TextAppearance.Huge">
+        <item name="android:textColor">@color/textColorPrimaryInverse</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.Transparent" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@color/transparent</item>
+    </style>
+
+    <style name="AppTheme.Spinner" parent="AppTheme">
+        <item name="colorControlNormal">@color/textColorPrimaryInverse</item>
+    </style>
+
+</resources>
