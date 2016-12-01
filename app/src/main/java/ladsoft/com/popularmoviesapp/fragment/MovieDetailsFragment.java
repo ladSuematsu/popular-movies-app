@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -61,6 +63,18 @@ public class MovieDetailsFragment extends Fragment {
 
         Calendar calendar = DateUtils.getCalendar(movie.getReleaseDate(), getString(R.string.movie_details_date_format));
 
+        binding.toolbar.inflateMenu(R.menu.movie_details_menu);
+        binding.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                if(id == R.id.movie_details_menu_fullscreen) {
+                    showFullSizePoster();
+                    return true;
+                }
+                return false;
+            }
+        });
         binding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,5 +98,17 @@ public class MovieDetailsFragment extends Fragment {
                 .placeholder(R.drawable.ic_movie_white)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(binding.appBarImage);
+
+        binding.appBarImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showFullSizePoster();
+            }
+        });
+    }
+
+    private void showFullSizePoster() {
+        ImageShowDialogFragment posterDialog = ImageShowDialogFragment.newInstance(movie.getPosterPath());
+        posterDialog.show(getFragmentManager(), null);
     }
 }
