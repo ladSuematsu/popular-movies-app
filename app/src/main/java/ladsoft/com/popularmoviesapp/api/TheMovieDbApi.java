@@ -13,7 +13,17 @@ public interface TheMovieDbApi {
 
         @GET(BuildConfig.API_ROUTE_MOVIE_SEARCH)
         Call<MovieSearchResult> getMovies(
-            @Query("sort_by") String sortCriteria,
-            @Query("api_key") String apiKey
+                @Query("sort_by") String sortCriteria,
+                @Query("api_key") String apiKey
+        );
+
+        @GET(BuildConfig.API_ROUTE_MOVIE_DISCOVERY_POPULAR)
+        Call<MovieSearchResult> getMoviesPopular(
+                @Query("api_key") String apiKey
+        );
+
+        @GET(BuildConfig.API_ROUTE_MOVIE_DISCOVERY_TOP_RATED)
+        Call<MovieSearchResult> getMoviesToptRated(
+                @Query("api_key") String apiKey
         );
 }

@@ -2,7 +2,7 @@ package ladsoft.com.popularmoviesapp.presenter;
 
 public interface MovieDiscoveryPresenter<T> {
     int SORT_TYPE_MOST_POPULAR = 0;
-    int SORT_TYPE_HIGHEST_RATED = 1;
+    int SORT_TYPE_TOP_RATED = 1;
 
 
     enum ErrorType {
