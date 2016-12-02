@@ -24,17 +24,16 @@ public class DefaultMovieDiscoveryPresenter implements MovieDiscoveryPresenter<M
 
     @Override
     public void loadData(int sortType) {
-        String sortCriteria;
+        Call<MovieSearchResult> call;
         switch(sortType) {
-            case SORT_TYPE_HIGHEST_RATED:
-                sortCriteria = TheMovieDbApi.SORT_CRITERIA_HIGHEST_RATED;
+            case SORT_TYPE_TOP_RATED:
+                call = api.getMoviesToptRated(apiKey);
                 break;
             case SORT_TYPE_MOST_POPULAR:
             default:
-                sortCriteria = TheMovieDbApi.SORT_CRITERIA_MOST_POPULAR;
+                call = api.getMoviesPopular(apiKey);
         }
 
-        Call<MovieSearchResult> call = api.getMovies(sortCriteria, apiKey);
         call.enqueue(callback);
     }
 
