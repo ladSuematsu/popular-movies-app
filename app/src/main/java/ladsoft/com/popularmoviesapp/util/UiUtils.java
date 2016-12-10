@@ -1,9 +1,18 @@
 package ladsoft.com.popularmoviesapp.util;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -61,6 +70,17 @@ public class UiUtils {
                 }
             }
         });
+    }
+
+    public static void startActivityWithSharedElementTrans(AppCompatActivity startActivity, Intent intent, Pair<View, String>... sharedElements) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            startActivity.startActivity(intent);
+        } else {
+            ActivityOptionsCompat activityOptions = ActivityOptionsCompat
+                    .makeSceneTransitionAnimation(startActivity, sharedElements);
+
+            startActivity.startActivity(intent, activityOptions.toBundle());
+        }
     }
 
 }

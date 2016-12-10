@@ -1,15 +1,10 @@
 package ladsoft.com.popularmoviesapp.fragment;
 
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -17,7 +12,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import ladsoft.com.popularmoviesapp.R;
 import ladsoft.com.popularmoviesapp.databinding.FragmentMovieDetailsBinding;
