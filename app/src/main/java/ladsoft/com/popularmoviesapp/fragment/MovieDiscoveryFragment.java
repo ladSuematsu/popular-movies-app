@@ -2,13 +2,13 @@ package ladsoft.com.popularmoviesapp.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.util.Pair;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Surface;
@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import ladsoft.com.popularmoviesapp.R;
 import ladsoft.com.popularmoviesapp.activity.MovieDetailsActivity;
@@ -92,10 +91,13 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryPr
     }
 
     @Override
-    public void onItemClick(Movie movie) {
+    public void onItemClick(View view, Movie movie) {
         Intent intent = new Intent(getContext(), MovieDetailsActivity.class);
         intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE, movie);
-        startActivity(intent);
+
+        Pair<View, String> sharedElements = Pair.create(view, getString(R.string.movie_details_transition_name_poster));
+
+        UiUtils.startActivityWithSharedElementTrans((AppCompatActivity) getActivity(), intent, sharedElements);
     }
 
     @Override

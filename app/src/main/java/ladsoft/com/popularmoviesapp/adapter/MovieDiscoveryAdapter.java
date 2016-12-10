@@ -90,11 +90,11 @@ public class MovieDiscoveryAdapter<T extends Movie> extends RecyclerView.Adapter
 
         @Override
         public void onClick(View view) {
-            callback.onItemClick(dataSource.get(getAdapterPosition()));
+            callback.onItemClick(binding.poster, dataSource.get(getAdapterPosition()));
         }
     }
 
     public interface Callback<T> {
-        void onItemClick(T movie);
+        void onItemClick(View view, T movie);
     }
 }

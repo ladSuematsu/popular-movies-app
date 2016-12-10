@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="movie_details_transition_name_poster">"app_bar_image"</string>
     <string name="movie_details_date_format">yyyy-MM-dd</string>
     <string name="movie_details_user_rating_format">%1$.1f/10</string>
     <string name="movie_details_synopsis_label">Synopsis</string>
