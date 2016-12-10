@@ -37,7 +37,7 @@
     <style name="AppTheme.TextAppearance.Medium.Inverse" parent="TextAppearance.AppCompat.Medium.Inverse"/>
 
     <style name="AppTheme.TextAppearance.Huge" parent="TextAppearance.AppCompat.Headline">
-        <item name="android:textSize">36sp</item>
+        <item name="android:textSize">32sp</item>
     </style>
     <style name="AppTheme.TextAppearance.Huge.Inverse" parent="AppTheme.TextAppearance.Huge">
         <item name="android:textColor">@color/textColorPrimaryInverse</item>
