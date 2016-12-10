@@ -71,6 +71,21 @@
                         android:shadowDy="1"
                         android:shadowRadius="2"
                         />
+                    <TextView android:id="@+id/rating_appbar"
+                        android:text="@string/empty_content"
+                        android:layout_below="@id/year_appbar"
+                        android:layout_alignStart="@id/complete_title_appbar"
+                        android:layout_alignLeft="@id/complete_title_appbar"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/textColorPrimaryInverse"
+                        android:textStyle="bold|italic"
+                        android:shadowColor="@color/textShadow"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="2"
+                        />
                 </RelativeLayout>
             </android.support.percent.PercentRelativeLayout>
             <android.support.v7.widget.Toolbar
@@ -96,18 +111,50 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <TextView
-                    android:id="@+id/complete_title_label"
-                    android:text="@string/movie_details_title_label"
+                    android:id="@+id/synopsis_label"
+                    android:text="@string/movie_details_synopsis_label"
                     android:textAppearance="@style/AppTheme.TextAppearance.Medium"
                     android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />
                 <TextView
-                    android:id="@+id/complete_title"
+                    android:id="@+id/synopsis"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/empty_content" />
+
+                <TextView
+                    android:id="@+id/original_title_label"
+                    android:text="@string/movie_details_original_title_label"
+                    android:textAppearance="@style/AppTheme.TextAppearance.Medium"
+                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_margin"
+                    />
+                <TextView
+                    android:id="@+id/original_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/empty_content"
+                    />
+
+                <TextView
+                    android:id="@+id/original_language_label"
+                    android:text="@string/movie_details_original_language_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:textAppearance="@style/AppTheme.TextAppearance.Medium"
+                    android:textStyle="bold"
+                    />
+                <TextView
+                    android:id="@+id/original_language"
+                    android:text="@string/empty_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
 
                 <TextView
                     android:id="@+id/year_label"
@@ -123,37 +170,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />
-
-                <TextView
-                    android:id="@+id/user_rating_label"
-                    android:text="@string/movie_details_user_rating_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/default_margin"
-                    android:textAppearance="@style/AppTheme.TextAppearance.Medium"
-                    android:textStyle="bold"/>
-                <TextView
-                    android:id="@+id/user_rating"
-                    android:text="@string/empty_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
-
-                <TextView
-                    android:id="@+id/synopsis_label"
-                    android:text="@string/movie_details_synopsis_label"
-                    android:textAppearance="@style/AppTheme.TextAppearance.Medium"
-                    android:textStyle="bold"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/default_margin"
-
-                    />
-                <TextView
-                    android:id="@+id/synopsis"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/empty_content" />
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </android.support.v4.widget.NestedScrollView>

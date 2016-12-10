@@ -2,11 +2,13 @@
 <resources>
     <string name="movie_details_transition_name_poster">"app_bar_image"</string>
     <string name="movie_details_date_format">yyyy-MM-dd</string>
-    <string name="movie_details_user_rating_format">%1$.1f/10</string>
+    <string name="movie_details_user_rating_label_format">%1$s/10</string>
+    <string name="movie_details_user_rating_format">0.#</string>
     <string name="movie_details_synopsis_label">Synopsis</string>
     <string name="movie_details_user_rating_label">User rating</string>
     <string name="movie_details_release_year_label">Release year</string>
-    <string name="movie_details_title_label">Title</string>
+    <string name="movie_details_original_title_label">Original title</string>
     <string name="movie_details_toolbar_title">Movie details</string>
     <string name="movie_details_show_full_poster">Show poster</string>
+    <string name="movie_details_original_language_label">Original Language</string>
 </resources>

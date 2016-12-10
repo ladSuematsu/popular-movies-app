@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import ladsoft.com.popularmoviesapp.R;
@@ -56,6 +57,7 @@ public class MovieDetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Calendar calendar = DateUtils.getCalendar(movie.getReleaseDate(), getString(R.string.movie_details_date_format));
+        DecimalFormat ratingFormat = new DecimalFormat(getString(R.string.movie_details_user_rating_format));
 
         binding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,15 +66,16 @@ public class MovieDetailsFragment extends Fragment {
             }
         });
 
-        binding.completeTitle.setText(movie.getTitle());
         binding.completeTitleAppbar.setText(movie.getTitle());
         binding.toolbar.setTitle(movie.getTitle());
-        binding.year.setText(String.valueOf(calendar.get(Calendar.YEAR)));
-        binding.yearAppbar.setText(binding.year.getText());
+        binding.ratingAppbar.setText(String.format(
+                getString(R.string.movie_details_user_rating_label_format),
+                ratingFormat.format(movie.getVoteAverage())));
+        binding.yearAppbar.setText(String.valueOf(calendar.get(Calendar.YEAR)));
+        binding.year.setText(binding.yearAppbar.getText());
         binding.synopsis.setText(movie.getOverview());
-        binding.userRating.setText(String.format(
-                getString(R.string.movie_details_user_rating_format),
-                movie.getVoteAverage()));
+        binding.originalTitle.setText(movie.getOriginalTitle());
+        binding.originalLanguage.setText(movie.getOriginalLanguage());
 
         Glide.with(this)
                 .load(movie.getPosterPath())
