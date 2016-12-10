@@ -27,6 +27,7 @@ import ladsoft.com.popularmoviesapp.model.Movie;
 import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryPresenter;
 import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryPresenterFactory;
 import ladsoft.com.popularmoviesapp.util.UiUtils;
+import ladsoft.com.popularmoviesapp.view.layoutmanager.decoration.SimplePaddingDecoration;
 
 public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryPresenter.Callback<MovieSearchResult>,MovieDiscoveryAdapter.Callback<Movie> {
 
@@ -59,6 +60,8 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryPr
 
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), listSpan);
         binding.movieDiscoveryList.setLayoutManager(layoutManager);
+        binding.movieDiscoveryList.addItemDecoration(
+                new SimplePaddingDecoration(getResources().getDimensionPixelSize(R.dimen.list_item_content_margin)));
         binding.movieDiscoveryList.setAdapter(adapter);
 
         ArrayAdapter sortSelectorAdapter = ArrayAdapter.createFromResource(getContext(),
