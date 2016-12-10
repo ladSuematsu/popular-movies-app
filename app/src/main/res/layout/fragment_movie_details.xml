@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".activity.MovieDetailsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -23,43 +24,55 @@
             app:expandedTitleTextAppearance="@style/AppTheme.TextAppearance.Transparent"
             android:theme="@style/AppTheme.AppBarOverlay"
             >
-            <ImageView
-                android:id="@+id/app_bar_image"
+            <android.support.percent.PercentRelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                />
-
-            <LinearLayout
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="@dimen/default_margin"
-                android:layout_marginLeft="@dimen/default_margin"
-                android:layout_marginStart="@dimen/default_margin"
-                android:orientation="vertical">
-                <TextView android:id="@+id/complete_title_appbar"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="@string/empty_content"
-                    android:textAppearance="@style/AppTheme.TextAppearance.Huge.Inverse"
-                    android:shadowColor="@color/textShadow"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:shadowRadius="2"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/app_bar_image"
+                    android:scaleType="fitCenter"
+                    app:layout_widthPercent="50%"
+                    app:layout_heightPercent="100%"
+                    android:padding="@dimen/list_item_content_margin"
+                    android:transitionName="@string/movie_details_transition_name_poster"
                     />
-                <TextView android:id="@+id/year_appbar"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="@string/empty_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    android:shadowColor="@color/textShadow"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:shadowRadius="2"
-                    />
-            </LinearLayout>
 
+                <RelativeLayout
+                    android:layout_toRightOf="@id/app_bar_image"
+                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_gravity="bottom"
+                    android:paddingLeft="@dimen/list_item_content_margin"
+                    android:paddingStart="@dimen/list_item_content_margin"
+                    android:paddingRight="@dimen/list_item_content_margin"
+                    android:paddingEnd="@dimen/list_item_content_margin"
+                    >
+                    <TextView android:id="@+id/complete_title_appbar"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="@string/empty_content"
+                        android:textAppearance="@style/AppTheme.TextAppearance.Huge.Inverse"
+                        android:shadowColor="@color/textShadow"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="2"
+                        android:layout_centerHorizontal="true"
+                        />
+                    <TextView android:id="@+id/year_appbar"
+                        android:text="@string/empty_content"
+                        android:layout_below="@id/complete_title_appbar"
+                        android:layout_alignStart="@id/complete_title_appbar"
+                        android:layout_alignLeft="@id/complete_title_appbar"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:shadowColor="@color/textShadow"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="2"
+                        />
+                </RelativeLayout>
+            </android.support.percent.PercentRelativeLayout>
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_height="?attr/actionBarSize"

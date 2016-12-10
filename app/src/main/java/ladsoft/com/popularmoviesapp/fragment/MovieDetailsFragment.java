@@ -1,15 +1,10 @@
 package ladsoft.com.popularmoviesapp.fragment;
 
 import android.databinding.DataBindingUtil;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -17,7 +12,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import ladsoft.com.popularmoviesapp.R;
 import ladsoft.com.popularmoviesapp.databinding.FragmentMovieDetailsBinding;
@@ -63,18 +57,6 @@ public class MovieDetailsFragment extends Fragment {
 
         Calendar calendar = DateUtils.getCalendar(movie.getReleaseDate(), getString(R.string.movie_details_date_format));
 
-        binding.toolbar.inflateMenu(R.menu.movie_details_menu);
-        binding.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                int id = item.getItemId();
-                if(id == R.id.movie_details_menu_fullscreen) {
-                    showFullSizePoster();
-                    return true;
-                }
-                return false;
-            }
-        });
         binding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,7 +76,6 @@ public class MovieDetailsFragment extends Fragment {
 
         Glide.with(this)
                 .load(movie.getPosterPath())
-                .centerCrop()
                 .placeholder(R.drawable.ic_movie_white)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(binding.appBarImage);
