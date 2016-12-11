@@ -21,6 +21,7 @@ android {
         buildConfigField "String", "API_ROUTE_MOVIE_SEARCH", "\"discover/movie\""
         buildConfigField "String", "API_ROUTE_MOVIE_DISCOVERY_POPULAR", "\"movie/popular\""
         buildConfigField "String", "API_ROUTE_MOVIE_DISCOVERY_TOP_RATED", "\"movie/top_rated\""
+        buildConfigField "String", "API_ROUTE_MOVIE_REVIEWS", "\"movie/{movie_id}/reviews\""
     }
     buildTypes {
         release {
