@@ -18,7 +18,6 @@ android {
         buildConfigField "String", "API_KEY", theMovieDbApiKey
         buildConfigField "String", "API_BASE_URL", "\"https://api.themoviedb.org/3/\""
         buildConfigField "String", "BASE_IMAGE_URL", "\"https://image.tmdb.org/t/p/w185\""
-        buildConfigField "String", "API_ROUTE_MOVIE_SEARCH", "\"discover/movie\""
         buildConfigField "String", "API_ROUTE_MOVIE_DISCOVERY_POPULAR", "\"movie/popular\""
         buildConfigField "String", "API_ROUTE_MOVIE_DISCOVERY_TOP_RATED", "\"movie/top_rated\""
         buildConfigField "String", "API_ROUTE_MOVIE_REVIEWS", "\"movie/{movie_id}/reviews\""
