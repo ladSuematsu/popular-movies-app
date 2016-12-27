@@ -11,4 +11,5 @@
     <string name="movie_details_toolbar_title">Movie details</string>
     <string name="movie_details_show_full_poster">Show poster</string>
     <string name="movie_details_original_language_label">Original Language</string>
+    <string name="movie_details_menu_favorite">Favorite movie</string>
 </resources>
