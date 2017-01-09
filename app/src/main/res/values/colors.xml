@@ -7,4 +7,5 @@
     <color name="transparent">@android:color/transparent</color>
     <color name="pureBlack">@android:color/black</color>
     <color name="textShadow">@color/pureBlack</color>
+    <color name="gray">@android:color/darker_gray</color>
 </resources>

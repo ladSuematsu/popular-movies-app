@@ -1,9 +1,14 @@
 package ladsoft.com.popularmoviesapp.fragment;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -15,21 +20,26 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import ladsoft.com.popularmoviesapp.R;
+import ladsoft.com.popularmoviesapp.adapter.MovieVideosAdapter;
 import ladsoft.com.popularmoviesapp.api.parser.MovieSearchResult;
 import ladsoft.com.popularmoviesapp.databinding.FragmentMovieDetailsBinding;
 import ladsoft.com.popularmoviesapp.model.Movie;
+import ladsoft.com.popularmoviesapp.model.MovieVideo;
 import ladsoft.com.popularmoviesapp.presenter.MovieDetailPresenterFactory;
 import ladsoft.com.popularmoviesapp.presenter.MovieDetailsPresenter;
 import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryPresenter;
 import ladsoft.com.popularmoviesapp.util.DateUtils;
+import ladsoft.com.popularmoviesapp.util.UiUtils;
 
-public class MovieDetailsFragment extends Fragment implements MovieDetailsPresenter.Callback<Movie> {
+public class MovieDetailsFragment extends Fragment implements MovieDetailsPresenter.Callback<Movie>,MovieVideosAdapter.Callback<MovieVideo> {
 
     private static final String ARG_MOVIE = "arg_movie";
     private FragmentMovieDetailsBinding binding;
     private MovieDetailsPresenter<Movie> presenter;
+    private MovieVideosAdapter<MovieVideo> movieVideosAdapter;
 
     public static MovieDetailsFragment newInstance(Movie movie) {
         Bundle args = new Bundle();
@@ -86,6 +96,20 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
                 showFullSizePoster();
             }
         });
+
+        LinearLayoutManager listLayoutManager = new LinearLayoutManager(getContext());
+        movieVideosAdapter = new MovieVideosAdapter<>(getLayoutInflater(savedInstanceState));
+        movieVideosAdapter.setCallback(this);
+        binding.videos.setNestedScrollingEnabled(false);
+        binding.videos.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        binding.videos.setLayoutManager(listLayoutManager);
+        binding.videos.setAdapter(movieVideosAdapter);
+        binding.videoLoadRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.loadMovieVideos();
+            }
+        });
     }
 
     @Override
@@ -127,6 +151,20 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
                 .placeholder(R.drawable.ic_movie_white)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(binding.appBarImage);
+
+        presenter.loadMovieVideos();
+    }
+
+    @Override
+    public void onVideoListLoaded(List<MovieVideo> videos) {
+        movieVideosAdapter.setDataSource(videos);
+        showVideoEmptyMessage(movieVideosAdapter.getItemCount() < 1);
+        showVideoLoadError(false);
+    }
+
+    @Override
+    public void onVideoLaunch(Uri videoUri) {
+        startActivity(new Intent(Intent.ACTION_VIEW, videoUri));
     }
 
     @Override
@@ -135,7 +173,36 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
     }
 
     @Override
-    public void onError() {
+    public void onError(MovieDetailsPresenter.ErrorType errorType) {
+        int messageResourceId = R.string.movie_details_error_generic;
+        switch(errorType) {
+            case VIDEO_DATA_LOAD_ERROR:
+                showVideoLoadError(true);
+                return;
 
+            case VIDEO_LINK_PARSE_ERROR:
+                messageResourceId = R.string.movie_details_error_invalid_video_link;
+                break;
+        }
+
+        UiUtils.showSnackbar(binding.getRoot(), getString(messageResourceId), null, Snackbar.LENGTH_SHORT, null);
     }
+
+    private void showVideoEmptyMessage(boolean show) {
+        binding.emptyContent.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    private void showVideoLoadError(boolean show) {
+        binding.errorContent.setVisibility(show ? View.VISIBLE : View.GONE);
+
+        if(show) {
+            movieVideosAdapter.clearData();
+        }
+    }
+
+    @Override
+    public void onItemClick(MovieVideo video) {
+        presenter.onMovieVideoSelected(getContext(), video);
+    }
+
 }
