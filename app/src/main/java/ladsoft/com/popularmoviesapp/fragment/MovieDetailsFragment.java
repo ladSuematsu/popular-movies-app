@@ -1,8 +1,11 @@
 package ladsoft.com.popularmoviesapp.fragment;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,8 +32,9 @@ import ladsoft.com.popularmoviesapp.presenter.MovieDetailPresenterFactory;
 import ladsoft.com.popularmoviesapp.presenter.MovieDetailsPresenter;
 import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryPresenter;
 import ladsoft.com.popularmoviesapp.util.DateUtils;
+import ladsoft.com.popularmoviesapp.util.UiUtils;
 
-public class MovieDetailsFragment extends Fragment implements MovieDetailsPresenter.Callback<Movie> {
+public class MovieDetailsFragment extends Fragment implements MovieDetailsPresenter.Callback<Movie>,MovieVideosAdapter.Callback<MovieVideo> {
 
     private static final String ARG_MOVIE = "arg_movie";
     private FragmentMovieDetailsBinding binding;
@@ -95,6 +99,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
 
         LinearLayoutManager listLayoutManager = new LinearLayoutManager(getContext());
         movieVideosAdapter = new MovieVideosAdapter<>(getLayoutInflater(savedInstanceState));
+        movieVideosAdapter.setCallback(this);
         binding.videos.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         binding.videos.setLayoutManager(listLayoutManager);
         binding.videos.setAdapter(movieVideosAdapter);
@@ -149,13 +154,34 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
     }
 
     @Override
+    public void onVideoLaunch(Uri videoUri) {
+        startActivity(new Intent(Intent.ACTION_VIEW, videoUri));
+    }
+
+    @Override
     public void onFavoriteSuccessful() {
 
     }
 
     @Override
     public void onError(MovieDetailsPresenter.ErrorType errorType) {
+        int messageResourceId = R.string.movie_details_error_generic;
+        switch(errorType) {
+            case VIDEO_DATA_LOAD_ERROR:
+                messageResourceId = R.string.movie_details_error_video_data_load;
+                break;
 
+            case VIDEO_LINK_PARSE_ERROR:
+                messageResourceId = R.string.movie_details_error_invalid_video_link;
+                break;
+        }
+
+        UiUtils.showSnackbar(binding.getRoot(), getString(messageResourceId), null, Snackbar.LENGTH_SHORT, null);
+    }
+
+    @Override
+    public void onItemClick(MovieVideo video) {
+        presenter.onMovieVideoSelected(getContext(), video);
     }
 
 }
