@@ -81,7 +81,9 @@ public class MovieVideosAdapter<T extends MovieVideo> extends RecyclerView.Adapt
 
         @Override
         public void onClick(View view) {
-            callback.onItemClick(dataSource.get(getAdapterPosition()));
+            if (callback != null) {
+                callback.onItemClick(dataSource.get(getAdapterPosition()));
+            }
         }
     }
 

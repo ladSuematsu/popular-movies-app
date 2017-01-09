@@ -4,6 +4,8 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -15,11 +17,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import ladsoft.com.popularmoviesapp.R;
+import ladsoft.com.popularmoviesapp.adapter.MovieVideosAdapter;
 import ladsoft.com.popularmoviesapp.api.parser.MovieSearchResult;
 import ladsoft.com.popularmoviesapp.databinding.FragmentMovieDetailsBinding;
 import ladsoft.com.popularmoviesapp.model.Movie;
+import ladsoft.com.popularmoviesapp.model.MovieVideo;
 import ladsoft.com.popularmoviesapp.presenter.MovieDetailPresenterFactory;
 import ladsoft.com.popularmoviesapp.presenter.MovieDetailsPresenter;
 import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryPresenter;
@@ -30,6 +35,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
     private static final String ARG_MOVIE = "arg_movie";
     private FragmentMovieDetailsBinding binding;
     private MovieDetailsPresenter<Movie> presenter;
+    private MovieVideosAdapter<MovieVideo> movieVideosAdapter;
 
     public static MovieDetailsFragment newInstance(Movie movie) {
         Bundle args = new Bundle();
@@ -86,6 +92,12 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
                 showFullSizePoster();
             }
         });
+
+        LinearLayoutManager listLayoutManager = new LinearLayoutManager(getContext());
+        movieVideosAdapter = new MovieVideosAdapter<>(getLayoutInflater(savedInstanceState));
+        binding.videos.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        binding.videos.setLayoutManager(listLayoutManager);
+        binding.videos.setAdapter(movieVideosAdapter);
     }
 
     @Override
@@ -127,6 +139,13 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
                 .placeholder(R.drawable.ic_movie_white)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(binding.appBarImage);
+
+        presenter.loadMovieVideos();
+    }
+
+    @Override
+    public void onVideoListLoaded(List<MovieVideo> videos) {
+        movieVideosAdapter.setDataSource(videos);
     }
 
     @Override
@@ -135,7 +154,8 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
     }
 
     @Override
-    public void onError() {
+    public void onError(MovieDetailsPresenter.ErrorType errorType) {
 
     }
+
 }
