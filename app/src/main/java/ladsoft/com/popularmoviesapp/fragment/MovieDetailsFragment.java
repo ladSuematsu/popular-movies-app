@@ -100,6 +100,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
         LinearLayoutManager listLayoutManager = new LinearLayoutManager(getContext());
         movieVideosAdapter = new MovieVideosAdapter<>(getLayoutInflater(savedInstanceState));
         movieVideosAdapter.setCallback(this);
+        binding.videos.setNestedScrollingEnabled(false);
         binding.videos.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         binding.videos.setLayoutManager(listLayoutManager);
         binding.videos.setAdapter(movieVideosAdapter);
