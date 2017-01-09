@@ -84,7 +84,7 @@ public class DefaultMovieDetailsPresenter implements MovieDetailsPresenter<Movie
         @Override
         public void onFailure(Call<MovieVideosRequestResult> call, Throwable t) {
             Log.e(TAG, t.getLocalizedMessage(), t);
-            presenterCallback.onError(MovieDetailsPresenter.ErrorType.DATA_LOAD_ERROR);
+            presenterCallback.onError(MovieDetailsPresenter.ErrorType.VIDEO_DATA_LOAD_ERROR);
         }
     };
 }

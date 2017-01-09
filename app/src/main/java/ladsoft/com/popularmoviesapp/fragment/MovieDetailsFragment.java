@@ -103,6 +103,12 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
         binding.videos.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         binding.videos.setLayoutManager(listLayoutManager);
         binding.videos.setAdapter(movieVideosAdapter);
+        binding.videoLoadRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.loadMovieVideos();
+            }
+        });
     }
 
     @Override
@@ -151,6 +157,8 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
     @Override
     public void onVideoListLoaded(List<MovieVideo> videos) {
         movieVideosAdapter.setDataSource(videos);
+        showVideoEmptyMessage(movieVideosAdapter.getItemCount() < 1);
+        showVideoLoadError(false);
     }
 
     @Override
@@ -168,8 +176,8 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
         int messageResourceId = R.string.movie_details_error_generic;
         switch(errorType) {
             case VIDEO_DATA_LOAD_ERROR:
-                messageResourceId = R.string.movie_details_error_video_data_load;
-                break;
+                showVideoLoadError(true);
+                return;
 
             case VIDEO_LINK_PARSE_ERROR:
                 messageResourceId = R.string.movie_details_error_invalid_video_link;
@@ -177,6 +185,18 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
         }
 
         UiUtils.showSnackbar(binding.getRoot(), getString(messageResourceId), null, Snackbar.LENGTH_SHORT, null);
+    }
+
+    private void showVideoEmptyMessage(boolean show) {
+        binding.emptyContent.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    private void showVideoLoadError(boolean show) {
+        binding.errorContent.setVisibility(show ? View.VISIBLE : View.GONE);
+
+        if(show) {
+            movieVideosAdapter.clearData();
+        }
     }
 
     @Override
