@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -23,14 +24,14 @@ import java.util.Calendar;
 import java.util.List;
 
 import ladsoft.com.popularmoviesapp.R;
+import ladsoft.com.popularmoviesapp.adapter.MovieReviewsAdapter;
 import ladsoft.com.popularmoviesapp.adapter.MovieVideosAdapter;
-import ladsoft.com.popularmoviesapp.api.parser.MovieSearchResult;
 import ladsoft.com.popularmoviesapp.databinding.FragmentMovieDetailsBinding;
 import ladsoft.com.popularmoviesapp.model.Movie;
+import ladsoft.com.popularmoviesapp.model.MovieReview;
 import ladsoft.com.popularmoviesapp.model.MovieVideo;
 import ladsoft.com.popularmoviesapp.presenter.MovieDetailPresenterFactory;
 import ladsoft.com.popularmoviesapp.presenter.MovieDetailsPresenter;
-import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryPresenter;
 import ladsoft.com.popularmoviesapp.util.DateUtils;
 import ladsoft.com.popularmoviesapp.util.UiUtils;
 
@@ -40,6 +41,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
     private FragmentMovieDetailsBinding binding;
     private MovieDetailsPresenter<Movie> presenter;
     private MovieVideosAdapter<MovieVideo> movieVideosAdapter;
+    private MovieReviewsAdapter<MovieReview> movieReviewsAdapter;
 
     public static MovieDetailsFragment newInstance(Movie movie) {
         Bundle args = new Bundle();
@@ -97,17 +99,32 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
             }
         });
 
-        LinearLayoutManager listLayoutManager = new LinearLayoutManager(getContext());
+
+        RecyclerView.ItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         movieVideosAdapter = new MovieVideosAdapter<>(getLayoutInflater(savedInstanceState));
         movieVideosAdapter.setCallback(this);
         binding.videos.setNestedScrollingEnabled(false);
-        binding.videos.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        binding.videos.setLayoutManager(listLayoutManager);
+        binding.videos.addItemDecoration(dividerItemDecoration);
+        binding.videos.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.videos.setAdapter(movieVideosAdapter);
-        binding.videoLoadRetry.setOnClickListener(new View.OnClickListener() {
+        binding.videosLoadRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.loadMovieVideos();
+                presenter.loadVideos();
+            }
+        });
+
+
+        movieReviewsAdapter = new MovieReviewsAdapter<>(getLayoutInflater(savedInstanceState));
+//        movieReviewsAdapter.setCallback(this);
+        binding.reviews.setNestedScrollingEnabled(false);
+        binding.reviews.addItemDecoration(dividerItemDecoration);
+        binding.reviews.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.reviews.setAdapter(movieReviewsAdapter);
+        binding.reviewsLoadRetry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.loadReviews();
             }
         });
     }
@@ -152,14 +169,22 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(binding.appBarImage);
 
-        presenter.loadMovieVideos();
+        presenter.loadVideos();
+        presenter.loadReviews();
     }
 
     @Override
     public void onVideoListLoaded(List<MovieVideo> videos) {
         movieVideosAdapter.setDataSource(videos);
-        showVideoEmptyMessage(movieVideosAdapter.getItemCount() < 1);
-        showVideoLoadError(false);
+        showVideosEmptyMessage(movieVideosAdapter.getItemCount() < 1);
+        showVideosLoadError(false);
+    }
+
+    @Override
+    public void onReviewListLoaded(List<MovieReview> reviews) {
+        movieReviewsAdapter.setDataSource(reviews);
+        showReviewsEmptyMessage(movieReviewsAdapter.getItemCount() < 1);
+        showReviewsLoadError(false);
     }
 
     @Override
@@ -177,26 +202,42 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
         int messageResourceId = R.string.movie_details_error_generic;
         switch(errorType) {
             case VIDEO_DATA_LOAD_ERROR:
-                showVideoLoadError(true);
+                showVideosLoadError(true);
                 return;
 
             case VIDEO_LINK_PARSE_ERROR:
                 messageResourceId = R.string.movie_details_error_invalid_video_link;
                 break;
+
+            case REVIEW_DATA_LOAD_ERROR:
+                showReviewsLoadError(true);
+                return;
         }
 
         UiUtils.showSnackbar(binding.getRoot(), getString(messageResourceId), null, Snackbar.LENGTH_SHORT, null);
     }
 
-    private void showVideoEmptyMessage(boolean show) {
-        binding.emptyContent.setVisibility(show ? View.VISIBLE : View.GONE);
+    private void showVideosEmptyMessage(boolean show) {
+        binding.emptyVideos.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    private void showVideoLoadError(boolean show) {
-        binding.errorContent.setVisibility(show ? View.VISIBLE : View.GONE);
+    private void showVideosLoadError(boolean show) {
+        binding.errorVideos.setVisibility(show ? View.VISIBLE : View.GONE);
 
         if(show) {
             movieVideosAdapter.clearData();
+        }
+    }
+
+    private void showReviewsEmptyMessage(boolean show) {
+        binding.emptyReviews.setVisibility(show ? View.VISIBLE : View.GONE);
+    }
+
+    private void showReviewsLoadError(boolean show) {
+        binding.errorReviews.setVisibility(show ? View.VISIBLE : View.GONE);
+
+        if(show) {
+            movieReviewsAdapter.clearData();
         }
     }
 

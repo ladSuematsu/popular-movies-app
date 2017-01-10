@@ -13,9 +13,12 @@
     <string name="movie_details_original_language_label">Original Language</string>
     <string name="movie_details_menu_favorite">Favorite movie</string>
     <string name="movie_details_videos_label">Trailers:</string>
+    <string name="movie_details_reviews_label">Reviews:</string>
     <string name="movie_details_error_video_data_load">Could not load the trailer list</string>
     <string name="movie_details_error_video_empty">No videos available</string>
     <string name="movie_details_error_invalid_video_link">Invalid video link</string>
+    <string name="movie_details_error_reviews_data_load">Could not load the reviews list</string>
+    <string name="movie_details_error_reviews_empty">No reviews available</string>
     <string name="movie_details_error_generic">Something went wrong</string>
     <string name="movie_details_retry">Retry</string>
 </resources>

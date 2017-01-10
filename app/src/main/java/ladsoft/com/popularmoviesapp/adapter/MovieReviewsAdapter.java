@@ -12,17 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ladsoft.com.popularmoviesapp.R;
-import ladsoft.com.popularmoviesapp.databinding.ListItemMovieVideoBinding;
-import ladsoft.com.popularmoviesapp.model.MovieVideo;
+import ladsoft.com.popularmoviesapp.databinding.ListItemMovieReviewBinding;
+import ladsoft.com.popularmoviesapp.model.MovieReview;
 
-public class MovieVideosAdapter<T extends MovieVideo> extends RecyclerView.Adapter<MovieVideosAdapter.Viewholder> {
+public class MovieReviewsAdapter<T extends MovieReview> extends RecyclerView.Adapter<MovieReviewsAdapter.Viewholder> {
 
     private final LayoutInflater inflater;
     private final Context context;
     private List<T> dataSource;
     private Callback<T> callback;
 
-    public MovieVideosAdapter(LayoutInflater inflater) {
+    public MovieReviewsAdapter(LayoutInflater inflater) {
         this.inflater = inflater;
         this.context = inflater.getContext();
         this.dataSource = new ArrayList<>();
@@ -30,16 +30,17 @@ public class MovieVideosAdapter<T extends MovieVideo> extends RecyclerView.Adapt
     }
 
     @Override
-    public MovieVideosAdapter.Viewholder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ListItemMovieVideoBinding binding = DataBindingUtil.inflate(inflater, R.layout.list_item_movie_video, parent, false);
+    public MovieReviewsAdapter.Viewholder onCreateViewHolder(ViewGroup parent, int viewType) {
+        ListItemMovieReviewBinding binding = DataBindingUtil.inflate(inflater, R.layout.list_item_movie_review, parent, false);
         return new Viewholder(binding);
     }
 
     @Override
-    public void onBindViewHolder(MovieVideosAdapter.Viewholder holder, int position) {
-        ListItemMovieVideoBinding binding = holder.getBinding();
-        T video = dataSource.get(position);
-        binding.description.setText(video.getName());
+    public void onBindViewHolder(MovieReviewsAdapter.Viewholder holder, int position) {
+        ListItemMovieReviewBinding binding = holder.getBinding();
+        T review = dataSource.get(position);
+        binding.author.setText(review.getAuthor());
+        binding.content.setText(review.getContent());
     }
 
     @Override
@@ -62,15 +63,15 @@ public class MovieVideosAdapter<T extends MovieVideo> extends RecyclerView.Adapt
     }
 
     public class Viewholder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private ListItemMovieVideoBinding binding;
+        private ListItemMovieReviewBinding binding;
 
-        public Viewholder(ListItemMovieVideoBinding binding) {
+        public Viewholder(ListItemMovieReviewBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
             this.binding.getRoot().setOnClickListener(this);
         }
 
-        public ListItemMovieVideoBinding getBinding() {
+        public ListItemMovieReviewBinding getBinding() {
             return binding;
         }
 
@@ -83,6 +84,6 @@ public class MovieVideosAdapter<T extends MovieVideo> extends RecyclerView.Adapt
     }
 
     public interface Callback<T> {
-        void onItemClick(T video);
+        void onItemClick(T review);
     }
 }

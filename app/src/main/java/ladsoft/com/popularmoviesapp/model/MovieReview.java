@@ -15,7 +15,7 @@ public class MovieReview {
     }
 
     @Expose @SerializedName("id") private String id;
-    @Expose @SerializedName("page") private String author;
+    @Expose @SerializedName("author") private String author;
     @Expose @SerializedName("content") private String content;
 
     public String getId() { return id; }
