@@ -107,7 +107,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
         binding.videos.addItemDecoration(dividerItemDecoration);
         binding.videos.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.videos.setAdapter(movieVideosAdapter);
-        binding.videoLoadRetry.setOnClickListener(new View.OnClickListener() {
+        binding.videosLoadRetry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 presenter.loadVideos();
@@ -176,8 +176,8 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
     @Override
     public void onVideoListLoaded(List<MovieVideo> videos) {
         movieVideosAdapter.setDataSource(videos);
-        showVideoEmptyMessage(movieVideosAdapter.getItemCount() < 1);
-        showVideoLoadError(false);
+        showVideosEmptyMessage(movieVideosAdapter.getItemCount() < 1);
+        showVideosLoadError(false);
     }
 
     @Override
@@ -202,7 +202,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
         int messageResourceId = R.string.movie_details_error_generic;
         switch(errorType) {
             case VIDEO_DATA_LOAD_ERROR:
-                showVideoLoadError(true);
+                showVideosLoadError(true);
                 return;
 
             case VIDEO_LINK_PARSE_ERROR:
@@ -217,12 +217,12 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
         UiUtils.showSnackbar(binding.getRoot(), getString(messageResourceId), null, Snackbar.LENGTH_SHORT, null);
     }
 
-    private void showVideoEmptyMessage(boolean show) {
-        binding.emptyContent.setVisibility(show ? View.VISIBLE : View.GONE);
+    private void showVideosEmptyMessage(boolean show) {
+        binding.emptyVideos.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    private void showVideoLoadError(boolean show) {
-        binding.errorContent.setVisibility(show ? View.VISIBLE : View.GONE);
+    private void showVideosLoadError(boolean show) {
+        binding.errorVideos.setVisibility(show ? View.VISIBLE : View.GONE);
 
         if(show) {
             movieVideosAdapter.clearData();

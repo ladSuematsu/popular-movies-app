@@ -197,14 +197,14 @@
                         />
 
 
-                    <TextView android:id="@+id/empty_content"
+                    <TextView android:id="@+id/empty_videos"
                         android:textStyle="italic"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/movie_details_error_video_empty"
                         />
-                    <LinearLayout android:id="@+id/error_content"
+                    <LinearLayout android:id="@+id/error_videos"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -217,7 +217,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/movie_details_error_video_data_load"
                             />
-                        <Button android:id="@+id/video_load_retry"
+                        <Button android:id="@+id/videos_load_retry"
                             style="@style/Widget.AppCompat.Button.Borderless"
                             android:text="@string/movie_details_retry"
                             android:textAllCaps="true"
