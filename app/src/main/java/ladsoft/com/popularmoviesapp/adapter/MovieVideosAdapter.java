@@ -8,16 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import ladsoft.com.popularmoviesapp.R;
-import ladsoft.com.popularmoviesapp.databinding.ListItemMoviePosterBinding;
 import ladsoft.com.popularmoviesapp.databinding.ListItemMovieVideoBinding;
-import ladsoft.com.popularmoviesapp.model.Movie;
 import ladsoft.com.popularmoviesapp.model.MovieVideo;
 
 public class MovieVideosAdapter<T extends MovieVideo> extends RecyclerView.Adapter<MovieVideosAdapter.Viewholder> {

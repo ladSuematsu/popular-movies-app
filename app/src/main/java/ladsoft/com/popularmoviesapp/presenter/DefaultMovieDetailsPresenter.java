@@ -9,6 +9,7 @@ import ladsoft.com.popularmoviesapp.BuildConfig;
 import ladsoft.com.popularmoviesapp.R;
 import ladsoft.com.popularmoviesapp.api.TheMovieDbApi;
 import ladsoft.com.popularmoviesapp.api.TheMovieDbApiModule;
+import ladsoft.com.popularmoviesapp.api.parser.MovieReviewRequestResult;
 import ladsoft.com.popularmoviesapp.api.parser.MovieVideosRequestResult;
 import ladsoft.com.popularmoviesapp.model.Movie;
 import ladsoft.com.popularmoviesapp.model.MovieVideo;
@@ -36,9 +37,15 @@ public class DefaultMovieDetailsPresenter implements MovieDetailsPresenter<Movie
     }
 
     @Override
-    public void loadMovieVideos() {
+    public void loadVideos() {
         Call<MovieVideosRequestResult> call = api.getMovieVideos(movie.getId(), apiKey);
-        call.enqueue(callback);
+        call.enqueue(videoRequestCallback);
+    }
+
+    @Override
+    public void loadReviews() {
+        Call<MovieReviewRequestResult> call = api.getMovieReviews(movie.getId(), apiKey);
+        call.enqueue(reviewRequestCallback);
     }
 
     @Override
@@ -70,7 +77,7 @@ public class DefaultMovieDetailsPresenter implements MovieDetailsPresenter<Movie
         presenterCallback.onFavoriteSuccessful();
     }
 
-    private retrofit2.Callback<MovieVideosRequestResult> callback = new retrofit2.Callback<MovieVideosRequestResult>() {
+    private retrofit2.Callback<MovieVideosRequestResult> videoRequestCallback = new retrofit2.Callback<MovieVideosRequestResult>() {
         @Override
         public void onResponse(Call<MovieVideosRequestResult> call, Response<MovieVideosRequestResult> response) {
             movieVideos = response.body();
@@ -87,4 +94,24 @@ public class DefaultMovieDetailsPresenter implements MovieDetailsPresenter<Movie
             presenterCallback.onError(MovieDetailsPresenter.ErrorType.VIDEO_DATA_LOAD_ERROR);
         }
     };
+
+    private MovieReviewRequestResult movieReviews;
+    private retrofit2.Callback<MovieReviewRequestResult> reviewRequestCallback = new retrofit2.Callback<MovieReviewRequestResult>() {
+        @Override
+        public void onResponse(Call<MovieReviewRequestResult> call, Response<MovieReviewRequestResult> response) {
+            movieReviews = response.body();
+            if(movieReviews != null) {
+                presenterCallback.onReviewListLoaded(movieReviews.getResults());
+            } else {
+                presenterCallback.onError(MovieDetailsPresenter.ErrorType.REVIEW_DATA_LOAD_ERROR);
+            }
+        }
+
+        @Override
+        public void onFailure(Call<MovieReviewRequestResult> call, Throwable t) {
+            Log.e(TAG, t.getLocalizedMessage(), t);
+            presenterCallback.onError(MovieDetailsPresenter.ErrorType.REVIEW_DATA_LOAD_ERROR);
+        }
+    };
+
 }
