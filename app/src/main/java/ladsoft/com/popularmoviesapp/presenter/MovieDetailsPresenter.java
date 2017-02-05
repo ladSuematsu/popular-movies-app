@@ -17,8 +17,8 @@ import ladsoft.com.popularmoviesapp.model.MovieVideo;
 
 import static ladsoft.com.popularmoviesapp.presenter.MovieDetailsMvp.ErrorType.VIDEO_LINK_PARSE_ERROR;
 
-public class DefaultMovieDetailsPresenter implements MovieDetailsMvp.Presenter<Movie, MovieReview, MovieVideo> {
-    private static final String TAG = DefaultMovieDetailsPresenter.class.getSimpleName();
+public class MovieDetailsPresenter implements MovieDetailsMvp.Presenter<Movie, MovieReview, MovieVideo> {
+    private static final String TAG = MovieDetailsPresenter.class.getSimpleName();
 
     private final MovieDetailsMvp.Model<Movie> model;
     private Movie movie;
@@ -27,7 +27,7 @@ public class DefaultMovieDetailsPresenter implements MovieDetailsMvp.Presenter<M
     private List<MovieReview> reviews;
     private List<MovieVideo> videos;
 
-    public DefaultMovieDetailsPresenter(MovieDetailsMvp.View<Movie, MovieReview, MovieVideo> view) {
+    public MovieDetailsPresenter(MovieDetailsMvp.View<Movie, MovieReview, MovieVideo> view) {
         this.view = new WeakReference<>(view);
         this.model = new MovieDetailsModel(this);
         reviews = new ArrayList<>();
