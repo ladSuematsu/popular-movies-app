@@ -3,49 +3,76 @@ package ladsoft.com.popularmoviesapp.presenter;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 
-import ladsoft.com.popularmoviesapp.BuildConfig;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+
 import ladsoft.com.popularmoviesapp.R;
-import ladsoft.com.popularmoviesapp.api.TheMovieDbApi;
-import ladsoft.com.popularmoviesapp.api.TheMovieDbApiModule;
-import ladsoft.com.popularmoviesapp.api.parser.MovieReviewRequestResult;
-import ladsoft.com.popularmoviesapp.api.parser.MovieVideosRequestResult;
 import ladsoft.com.popularmoviesapp.model.Movie;
+import ladsoft.com.popularmoviesapp.model.MovieReview;
 import ladsoft.com.popularmoviesapp.model.MovieVideo;
-import retrofit2.Call;
-import retrofit2.Response;
 
-public class DefaultMovieDetailsPresenter implements MovieDetailsPresenter<Movie> {
+import static ladsoft.com.popularmoviesapp.presenter.MovieDetailsMvp.ErrorType.VIDEO_LINK_PARSE_ERROR;
+
+public class DefaultMovieDetailsPresenter implements MovieDetailsMvp.Presenter<Movie, MovieReview, MovieVideo> {
     private static final String TAG = DefaultMovieDetailsPresenter.class.getSimpleName();
-    private static final String apiKey = BuildConfig.API_KEY;
 
-    private final TheMovieDbApi api;
+    private final MovieDetailsMvp.Model<Movie> model;
     private Movie movie;
-    private Callback presenterCallback;
-    private MovieVideosRequestResult movieVideos;
+    private WeakReference<MovieDetailsMvp.View<Movie, MovieReview, MovieVideo>>
+            view;
+    private List<MovieReview> reviews;
+    private List<MovieVideo> videos;
 
-    public DefaultMovieDetailsPresenter(Callback presenterCallback) {
-        this.presenterCallback = presenterCallback;
-        this.api = TheMovieDbApiModule.providesApiAdapter();
+    public DefaultMovieDetailsPresenter(MovieDetailsMvp.View<Movie, MovieReview, MovieVideo> view) {
+        this.view = new WeakReference<>(view);
+        this.model = new MovieDetailsModel(this);
+        reviews = new ArrayList<>();
+        videos = new ArrayList<>();
+    }
+
+    @Override
+    public Context getContext() {
+        return ((Fragment) view.get()).getContext();
     }
 
     @Override
     public void loadData(Movie movie) {
         this.movie = movie;
-        presenterCallback.onDataLoaded(movie);
+        model.loadDetails(movie);
     }
 
     @Override
-    public void loadVideos() {
-        Call<MovieVideosRequestResult> call = api.getMovieVideos(movie.getId(), apiKey);
-        call.enqueue(videoRequestCallback);
+    public void loadVideos() { model.loadVideos(movie.getId()); }
+
+    @Override
+    public void loadReviews() { model.loadReviews(movie.getId());}
+
+
+    @Override
+    public void onMovieDetailsLoaded(Movie data) {
+        this.movie = data;
+        view.get().onDataLoaded(movie);
     }
 
     @Override
-    public void loadReviews() {
-        Call<MovieReviewRequestResult> call = api.getMovieReviews(movie.getId(), apiKey);
-        call.enqueue(reviewRequestCallback);
+    public void onReviewsLoaded(List<MovieReview> reviews) {
+        this.reviews = reviews;
+        view.get().refreshReviews(reviews);
+    }
+
+    @Override
+    public void onVideosLoaded(List<MovieVideo> videos) {
+        this.videos = videos;
+        view.get().refreshVideos(videos);
+    }
+
+    @Override
+    public void onSaved() {
+        view.get().onFavoriteSuccessful(movie.isFavorite());
     }
 
     @Override
@@ -61,9 +88,9 @@ public class DefaultMovieDetailsPresenter implements MovieDetailsPresenter<Movie
         }
 
         if (videoUri != null) {
-            presenterCallback.onVideoLaunch(videoUri);
+            view.get().onVideoLaunch(videoUri);
         } else {
-            presenterCallback.onError(ErrorType.VIDEO_LINK_PARSE_ERROR);
+            onError(VIDEO_LINK_PARSE_ERROR);
         }
     }
 
@@ -74,44 +101,28 @@ public class DefaultMovieDetailsPresenter implements MovieDetailsPresenter<Movie
 
     @Override
     public void setFavorite() {
-        presenterCallback.onFavoriteSuccessful();
+        model.saveDetails(movie);
     }
 
-    private retrofit2.Callback<MovieVideosRequestResult> videoRequestCallback = new retrofit2.Callback<MovieVideosRequestResult>() {
-        @Override
-        public void onResponse(Call<MovieVideosRequestResult> call, Response<MovieVideosRequestResult> response) {
-            movieVideos = response.body();
-            if(movieVideos != null) {
-                presenterCallback.onVideoListLoaded(movieVideos.getResults());
-            } else {
-                presenterCallback.onError(MovieDetailsPresenter.ErrorType.VIDEO_DATA_LOAD_ERROR);
-            }
-        }
+    @Override
+    public void onError(MovieDetailsMvp.ErrorType errorType) {
+        switch(errorType) {
+            case VIDEO_DATA_LOAD_ERROR:
+                view.get().showVideosLoadError(true);
+                 return;
 
-        @Override
-        public void onFailure(Call<MovieVideosRequestResult> call, Throwable t) {
-            Log.e(TAG, t.getLocalizedMessage(), t);
-            presenterCallback.onError(MovieDetailsPresenter.ErrorType.VIDEO_DATA_LOAD_ERROR);
-        }
-    };
+            case VIDEO_LINK_PARSE_ERROR:
+                view.get().showSnackbar(R.string.movie_details_error_generic);
+                break;
 
-    private MovieReviewRequestResult movieReviews;
-    private retrofit2.Callback<MovieReviewRequestResult> reviewRequestCallback = new retrofit2.Callback<MovieReviewRequestResult>() {
-        @Override
-        public void onResponse(Call<MovieReviewRequestResult> call, Response<MovieReviewRequestResult> response) {
-            movieReviews = response.body();
-            if(movieReviews != null) {
-                presenterCallback.onReviewListLoaded(movieReviews.getResults());
-            } else {
-                presenterCallback.onError(MovieDetailsPresenter.ErrorType.REVIEW_DATA_LOAD_ERROR);
-            }
+            case REVIEW_DATA_LOAD_ERROR:
+                view.get().showReviewsLoadError(true);
+                return;
+            case FAVORITE_ERROR:
+                movie.setFavorite(!movie.isFavorite());
+                view.get().onFavoriteSuccessful(movie.isFavorite());
+                break;
         }
-
-        @Override
-        public void onFailure(Call<MovieReviewRequestResult> call, Throwable t) {
-            Log.e(TAG, t.getLocalizedMessage(), t);
-            presenterCallback.onError(MovieDetailsPresenter.ErrorType.REVIEW_DATA_LOAD_ERROR);
-        }
-    };
+    }
 
 }
