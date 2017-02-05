@@ -17,6 +17,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.MovieDetailsActivity"/>
+        <provider
+            android:authorities="ladsoft.com.popularmoviesapp"
+            android:name=".data.MovieProvider" />
     </application>
 
 </manifest>
