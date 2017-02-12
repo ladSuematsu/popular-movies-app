@@ -1,58 +1,57 @@
 package ladsoft.com.popularmoviesapp.presenter;
 
-import android.util.Log;
+import android.content.Context;
+import android.database.Cursor;
+import android.support.v4.app.Fragment;
 
-import ladsoft.com.popularmoviesapp.BuildConfig;
-import ladsoft.com.popularmoviesapp.api.TheMovieDbApi;
-import ladsoft.com.popularmoviesapp.api.TheMovieDbApiModule;
+import java.lang.ref.WeakReference;
+import java.util.List;
+
+import ladsoft.com.popularmoviesapp.R;
 import ladsoft.com.popularmoviesapp.api.parser.MovieSearchResult;
 import ladsoft.com.popularmoviesapp.model.Movie;
-import retrofit2.Call;
-import retrofit2.Response;
 
-public class DefaultMovieDiscoveryPresenter implements MovieDiscoveryPresenter<Movie> {
+import static ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryMvp.SORT_TYPE_USER_FAVORITES;
+
+public class DefaultMovieDiscoveryPresenter implements MovieDiscoveryMvp.Presenter<Movie> {
     private static final String TAG = DefaultMovieDiscoveryPresenter.class.getSimpleName();
-    private final Callback<MovieSearchResult> presenterCallback;
-    private final TheMovieDbApi api;
-    private final String apiKey = BuildConfig.API_KEY;
+    private final MovieDiscoveryMvp.Model<Movie> model;
+    private final WeakReference<MovieDiscoveryMvp.View<Movie>> view;
     private MovieSearchResult result;
 
-    public DefaultMovieDiscoveryPresenter(Callback<MovieSearchResult> presenterCallback) {
-        this.presenterCallback = presenterCallback;
-        this.api = TheMovieDbApiModule.providesApiAdapter();
+    public DefaultMovieDiscoveryPresenter(MovieDiscoveryMvp.View<Movie> view) {
+        this.view = new WeakReference<>(view);
+        this.model = new MovieDiscoveryModel(this);
+    }
+
+    @Override
+    public Context getContext() {
+        return ((Fragment) view.get()).getContext();
     }
 
     @Override
     public void loadData(int sortType) {
-        Call<MovieSearchResult> call;
-        switch(sortType) {
-            case SORT_TYPE_TOP_RATED:
-                call = api.getMoviesToptRated(apiKey);
-                break;
-            case SORT_TYPE_MOST_POPULAR:
-            default:
-                call = api.getMoviesPopular(apiKey);
+        if (sortType == SORT_TYPE_USER_FAVORITES) {
+            view.get().showFavorites();
+        } else {
+            model.loadMovies(sortType);
         }
-
-        call.enqueue(callback);
     }
 
-    private retrofit2.Callback<MovieSearchResult> callback = new retrofit2.Callback<MovieSearchResult>() {
-        @Override
-        public void onResponse(Call<MovieSearchResult> call, Response<MovieSearchResult> response) {
-            result = response.body();
-            if(result != null) {
-                presenterCallback.onDataLoaded(result);
-            } else {
-                presenterCallback.onPresenterError(ErrorType.DATA_LOAD_ERROR);
+    @Override
+    public void onDataLoaded(List<Movie> data) {
+        view.get().refreshMovies(data);
+    }
 
-            }
-        }
+    @Override
+    public void onError(MovieDetailsMvp.ErrorType errorType) {
+        switch(errorType) {
+            case DATA_LOAD_ERROR:
+                view.get().showSnackbar(R.string.movie_discovery_data_load_error);
+                break;
 
-        @Override
-        public void onFailure(Call<MovieSearchResult> call, Throwable t) {
-            Log.e(TAG, t.getLocalizedMessage(), t);
-            presenterCallback.onPresenterError(ErrorType.DATA_LOAD_ERROR);
+            default:
+                view.get().showSnackbar(R.string.movie_discovery_error);
         }
-    };
+    }
 }

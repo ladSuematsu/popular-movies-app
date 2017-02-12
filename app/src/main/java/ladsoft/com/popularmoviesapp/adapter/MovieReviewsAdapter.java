@@ -8,24 +8,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import ladsoft.com.popularmoviesapp.R;
-import ladsoft.com.popularmoviesapp.databinding.ListItemMoviePosterBinding;
-import ladsoft.com.popularmoviesapp.model.Movie;
+import ladsoft.com.popularmoviesapp.databinding.ListItemMovieReviewBinding;
+import ladsoft.com.popularmoviesapp.model.MovieReview;
 
-public class MovieDiscoveryAdapter<T extends Movie> extends RecyclerView.Adapter<MovieDiscoveryAdapter.Viewholder> {
+public class MovieReviewsAdapter<T extends MovieReview> extends RecyclerView.Adapter<MovieReviewsAdapter.Viewholder> {
 
     private final LayoutInflater inflater;
     private final Context context;
     private List<T> dataSource;
     private Callback<T> callback;
 
-    public MovieDiscoveryAdapter(LayoutInflater inflater) {
+    public MovieReviewsAdapter(LayoutInflater inflater) {
         this.inflater = inflater;
         this.context = inflater.getContext();
         this.dataSource = new ArrayList<>();
@@ -33,33 +30,23 @@ public class MovieDiscoveryAdapter<T extends Movie> extends RecyclerView.Adapter
     }
 
     @Override
-    public MovieDiscoveryAdapter.Viewholder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ListItemMoviePosterBinding binding = DataBindingUtil.inflate(inflater, R.layout.list_item_movie_poster, parent, false);
+    public MovieReviewsAdapter.Viewholder onCreateViewHolder(ViewGroup parent, int viewType) {
+        ListItemMovieReviewBinding binding = DataBindingUtil.inflate(inflater, R.layout.list_item_movie_review, parent, false);
         return new Viewholder(binding);
     }
 
     @Override
-    public void onBindViewHolder(MovieDiscoveryAdapter.Viewholder holder, int position) {
-        ListItemMoviePosterBinding binding = holder.getBinding();
-
-        Movie movie = dataSource.get(position);
-
-        binding.caption.setText(movie.getTitle());
-
-        Glide.with(context)
-            .load(movie.getPosterPath())
-            .fitCenter()
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .into(binding.poster);
+    public void onBindViewHolder(MovieReviewsAdapter.Viewholder holder, int position) {
+        ListItemMovieReviewBinding binding = holder.getBinding();
+        T review = dataSource.get(position);
+        binding.author.setText(review.getAuthor());
+        binding.content.setText(review.getContent());
     }
 
     @Override
     public int getItemCount() {
         return dataSource.size();
     }
-
-    @Override
-    public long getItemId(int position) { return dataSource.get(position).getId(); }
 
     public void setDataSource(@NonNull List<T> dataSource) {
         this.dataSource = dataSource;
@@ -76,25 +63,27 @@ public class MovieDiscoveryAdapter<T extends Movie> extends RecyclerView.Adapter
     }
 
     public class Viewholder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private ListItemMoviePosterBinding binding;
+        private ListItemMovieReviewBinding binding;
 
-        public Viewholder(ListItemMoviePosterBinding binding) {
+        public Viewholder(ListItemMovieReviewBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            this.binding.poster.setOnClickListener(this);
+            this.binding.getRoot().setOnClickListener(this);
         }
 
-        public ListItemMoviePosterBinding getBinding() {
+        public ListItemMovieReviewBinding getBinding() {
             return binding;
         }
 
         @Override
         public void onClick(View view) {
-            callback.onItemClick(binding.poster, dataSource.get(getAdapterPosition()));
+            if (callback != null) {
+                callback.onItemClick(dataSource.get(getAdapterPosition()));
+            }
         }
     }
 
     public interface Callback<T> {
-        void onItemClick(View view, T movie);
+        void onItemClick(T review);
     }
 }

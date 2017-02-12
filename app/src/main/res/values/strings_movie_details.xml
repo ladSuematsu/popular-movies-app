@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="movie_details_transition_name_poster">"app_bar_image"</string>
     <string name="movie_details_date_format">yyyy-MM-dd</string>
-    <string name="movie_details_user_rating_format">%1$.1f/10</string>
+    <string name="movie_details_user_rating_label_format">%1$s/10</string>
+    <string name="movie_details_user_rating_format">0.#</string>
     <string name="movie_details_synopsis_label">Synopsis</string>
     <string name="movie_details_user_rating_label">User rating</string>
     <string name="movie_details_release_year_label">Release year</string>
-    <string name="movie_details_title_label">Title</string>
+    <string name="movie_details_original_title_label">Original title</string>
     <string name="movie_details_toolbar_title">Movie details</string>
     <string name="movie_details_show_full_poster">Show poster</string>
+    <string name="movie_details_original_language_label">Original Language</string>
+    <string name="movie_details_menu_favorite">Favorite movie</string>
+    <string name="movie_details_videos_label">Trailers:</string>
+    <string name="movie_details_reviews_label">Reviews:</string>
+    <string name="movie_details_error_video_data_load">Could not load the trailer list</string>
+    <string name="movie_details_error_video_empty">No videos available</string>
+    <string name="movie_details_error_invalid_video_link">Invalid video link</string>
+    <string name="movie_details_error_reviews_data_load">Could not load the reviews list</string>
+    <string name="movie_details_error_reviews_empty">No reviews available</string>
+    <string name="movie_details_error_generic">Something went wrong</string>
+    <string name="movie_details_retry">Retry</string>
 </resources>

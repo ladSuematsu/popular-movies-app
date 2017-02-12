@@ -3,8 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="textColorPrimaryInverse">@android:color/primary_text_dark</color>
+    <color name="textColorPrimaryInverse">@android:color/white</color>
     <color name="transparent">@android:color/transparent</color>
     <color name="pureBlack">@android:color/black</color>
     <color name="textShadow">@color/pureBlack</color>
+    <color name="gray">@android:color/darker_gray</color>
 </resources>

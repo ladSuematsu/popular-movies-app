@@ -1,15 +1,16 @@
 package ladsoft.com.popularmoviesapp.presenter;
 
-public interface MovieDiscoveryPresenter<T> {
+public interface MovieDiscoveryPresenter {
     int SORT_TYPE_MOST_POPULAR = 0;
     int SORT_TYPE_TOP_RATED = 1;
+    int SORT_TYPE_USER_FAVORITES = 2;
+
+    void loadData(int sortType);
 
 
     enum ErrorType {
-        DATA_LOAD_ERROR;
+        DATA_LOAD_ERROR
     }
-
-    void loadData(int sortType);
 
     interface Callback<T> {
         void onDataLoaded(T movies);

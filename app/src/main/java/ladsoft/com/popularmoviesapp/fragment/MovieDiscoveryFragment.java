@@ -2,14 +2,19 @@ package ladsoft.com.popularmoviesapp.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
+import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.util.Pair;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.View;
@@ -17,23 +22,32 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
+
+import java.util.List;
 
 import ladsoft.com.popularmoviesapp.R;
 import ladsoft.com.popularmoviesapp.activity.MovieDetailsActivity;
+import ladsoft.com.popularmoviesapp.adapter.FavoritesAdapter;
 import ladsoft.com.popularmoviesapp.adapter.MovieDiscoveryAdapter;
-import ladsoft.com.popularmoviesapp.api.parser.MovieSearchResult;
+import ladsoft.com.popularmoviesapp.data.MovieContract;
 import ladsoft.com.popularmoviesapp.databinding.FragmentMainBinding;
 import ladsoft.com.popularmoviesapp.model.Movie;
-import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryPresenter;
+import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryMvp;
 import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryPresenterFactory;
 import ladsoft.com.popularmoviesapp.util.UiUtils;
+import ladsoft.com.popularmoviesapp.view.layoutmanager.decoration.SimplePaddingDecoration;
 
-public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryPresenter.Callback<MovieSearchResult>,MovieDiscoveryAdapter.Callback<Movie> {
+public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryMvp.View<Movie>, MovieDiscoveryAdapter.Callback<Movie>,
+        LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final String TAG = MovieDiscoveryFragment.class.getSimpleName();
 
     private FragmentMainBinding binding;
-    private MovieDiscoveryPresenter<Movie> presenter;
+    private MovieDiscoveryMvp.Presenter<Movie> presenter;
     private MovieDiscoveryAdapter<Movie> adapter;
+    private FavoritesAdapter favoritesAdapter;
+    private static final int FAVORITES_LOADER = 0;
+    private Loader<Cursor> loader;
 
     public static MovieDiscoveryFragment newInstance() {
         return new MovieDiscoveryFragment();
@@ -50,8 +64,12 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryPr
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adapter = new MovieDiscoveryAdapter<>(getLayoutInflater(savedInstanceState));
+        LayoutInflater inflater = getLayoutInflater(savedInstanceState);
+        adapter = new MovieDiscoveryAdapter<>(inflater);
         adapter.setCallback(this);
+
+        favoritesAdapter = new FavoritesAdapter(inflater, null);
+        favoritesAdapter.setCallback(this);
 
         WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         int rotation = windowManager.getDefaultDisplay().getRotation();
@@ -60,6 +78,8 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryPr
 
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), listSpan);
         binding.movieDiscoveryList.setLayoutManager(layoutManager);
+        binding.movieDiscoveryList.addItemDecoration(
+                new SimplePaddingDecoration(getResources().getDimensionPixelSize(R.dimen.list_item_content_margin)));
         binding.movieDiscoveryList.setAdapter(adapter);
 
         ArrayAdapter sortSelectorAdapter = ArrayAdapter.createFromResource(getContext(),
@@ -84,28 +104,68 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryPr
         super.onActivityCreated(savedInstanceState);
 
         presenter = MovieDiscoveryPresenterFactory.create(this);
+        loader = getLoaderManager().initLoader(FAVORITES_LOADER, null, this);
     }
 
     @Override
-    public void onDataLoaded(MovieSearchResult movies) {
-        adapter.setDataSource(movies.getResult());
+    public void onResume() {
+        super.onResume();
+        loader.forceLoad();
     }
 
     @Override
-    public void onItemClick(Movie movie) {
+    public void onItemClick(View view, Movie movie) {
         Intent intent = new Intent(getContext(), MovieDetailsActivity.class);
         intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE, movie);
-        startActivity(intent);
+
+        Pair<View, String> sharedElements = Pair.create(view, getString(R.string.movie_details_transition_name_poster));
+
+        UiUtils.startActivityWithSharedElementTrans((AppCompatActivity) getActivity(), intent, sharedElements);
     }
 
     @Override
-    public void onPresenterError(MovieDiscoveryPresenter.ErrorType errorType) {
-        switch (errorType) {
-            case DATA_LOAD_ERROR:
-                UiUtils.showSnackbar(binding.getRoot(), getString(R.string.movie_discovery_data_load_error),
-                        getString(R.string.movie_discovery_ok), Snackbar.LENGTH_SHORT, null);
-            break;
-        }
+    public void refreshMovies(List<Movie> videos) {
+        binding.movieDiscoveryList.setAdapter(adapter);
+        adapter.setDataSource(videos);
     }
 
+    @Override
+    public void showFavorites() {
+        Log.i(TAG, "Swapping adapter list with favorites adapter");
+        binding.movieDiscoveryList.setAdapter(favoritesAdapter);
+    }
+
+    @Override
+    public void showSnackbar(int messageResourceId) {
+        UiUtils.showSnackbar(binding.getRoot(), getString(messageResourceId),
+                getString(R.string.movie_discovery_ok), Snackbar.LENGTH_SHORT, null);
+    }
+
+    @Override
+    public Loader onCreateLoader(int id, Bundle args) {
+        Log.i(TAG, "Creating loader");
+        return new CursorLoader(getActivity(),
+                MovieContract.MovieEntry.CONTENT_URI,
+                null,
+                MovieContract.MovieEntry.COLUMN_IS_FAVORITE + "=?",
+                new String[] {"1"},
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.i(TAG, "Loading cursor into favorites adapter");
+
+        if(data == null) {
+            showSnackbar(R.string.movie_discovery_favorites_load_error);
+        }
+
+        favoritesAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        Log.i(TAG, "Resetting favorites adapter");
+        favoritesAdapter.swapCursor(null);
+    }
 }

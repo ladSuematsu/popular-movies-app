@@ -8,24 +8,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import ladsoft.com.popularmoviesapp.R;
-import ladsoft.com.popularmoviesapp.databinding.ListItemMoviePosterBinding;
-import ladsoft.com.popularmoviesapp.model.Movie;
+import ladsoft.com.popularmoviesapp.databinding.ListItemMovieVideoBinding;
+import ladsoft.com.popularmoviesapp.model.MovieVideo;
 
-public class MovieDiscoveryAdapter<T extends Movie> extends RecyclerView.Adapter<MovieDiscoveryAdapter.Viewholder> {
+public class MovieVideosAdapter<T extends MovieVideo> extends RecyclerView.Adapter<MovieVideosAdapter.Viewholder> {
 
     private final LayoutInflater inflater;
     private final Context context;
     private List<T> dataSource;
     private Callback<T> callback;
 
-    public MovieDiscoveryAdapter(LayoutInflater inflater) {
+    public MovieVideosAdapter(LayoutInflater inflater) {
         this.inflater = inflater;
         this.context = inflater.getContext();
         this.dataSource = new ArrayList<>();
@@ -33,33 +30,22 @@ public class MovieDiscoveryAdapter<T extends Movie> extends RecyclerView.Adapter
     }
 
     @Override
-    public MovieDiscoveryAdapter.Viewholder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ListItemMoviePosterBinding binding = DataBindingUtil.inflate(inflater, R.layout.list_item_movie_poster, parent, false);
+    public MovieVideosAdapter.Viewholder onCreateViewHolder(ViewGroup parent, int viewType) {
+        ListItemMovieVideoBinding binding = DataBindingUtil.inflate(inflater, R.layout.list_item_movie_video, parent, false);
         return new Viewholder(binding);
     }
 
     @Override
-    public void onBindViewHolder(MovieDiscoveryAdapter.Viewholder holder, int position) {
-        ListItemMoviePosterBinding binding = holder.getBinding();
-
-        Movie movie = dataSource.get(position);
-
-        binding.caption.setText(movie.getTitle());
-
-        Glide.with(context)
-            .load(movie.getPosterPath())
-            .fitCenter()
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .into(binding.poster);
+    public void onBindViewHolder(MovieVideosAdapter.Viewholder holder, int position) {
+        ListItemMovieVideoBinding binding = holder.getBinding();
+        T video = dataSource.get(position);
+        holder.setData(video);
     }
 
     @Override
     public int getItemCount() {
         return dataSource.size();
     }
-
-    @Override
-    public long getItemId(int position) { return dataSource.get(position).getId(); }
 
     public void setDataSource(@NonNull List<T> dataSource) {
         this.dataSource = dataSource;
@@ -76,25 +62,32 @@ public class MovieDiscoveryAdapter<T extends Movie> extends RecyclerView.Adapter
     }
 
     public class Viewholder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private ListItemMoviePosterBinding binding;
+        private ListItemMovieVideoBinding binding;
 
-        public Viewholder(ListItemMoviePosterBinding binding) {
+        public Viewholder(ListItemMovieVideoBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            this.binding.poster.setOnClickListener(this);
+            this.binding.getRoot().setOnClickListener(this);
         }
 
-        public ListItemMoviePosterBinding getBinding() {
+        public ListItemMovieVideoBinding getBinding() {
             return binding;
         }
 
         @Override
         public void onClick(View view) {
-            callback.onItemClick(binding.poster, dataSource.get(getAdapterPosition()));
+            if (callback != null) {
+                callback.onItemClick(dataSource.get(getAdapterPosition()));
+            }
+        }
+
+        public void setData(T data) {
+            binding.description.setText(data.getName());
+
         }
     }
 
     public interface Callback<T> {
-        void onItemClick(View view, T movie);
+        void onItemClick(T video);
     }
 }

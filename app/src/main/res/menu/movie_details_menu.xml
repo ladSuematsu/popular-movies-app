@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/movie_details_menu_fullscreen"
-        android:title="@string/movie_details_show_full_poster"
-        android:icon="@drawable/ic_fullscreen_white"
+    <item android:id="@+id/movie_details_menu_favorite"
+        android:title="@string/movie_details_menu_favorite"
+        android:icon="@drawable/ic_grade_outline_white"
         app:showAsAction="always"
         />
 </menu>
