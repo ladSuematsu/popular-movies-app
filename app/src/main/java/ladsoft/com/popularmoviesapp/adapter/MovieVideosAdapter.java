@@ -39,7 +39,7 @@ public class MovieVideosAdapter<T extends MovieVideo> extends RecyclerView.Adapt
     public void onBindViewHolder(MovieVideosAdapter.Viewholder holder, int position) {
         ListItemMovieVideoBinding binding = holder.getBinding();
         T video = dataSource.get(position);
-        binding.description.setText(video.getName());
+        holder.setData(video);
     }
 
     @Override
@@ -79,6 +79,11 @@ public class MovieVideosAdapter<T extends MovieVideo> extends RecyclerView.Adapt
             if (callback != null) {
                 callback.onItemClick(dataSource.get(getAdapterPosition()));
             }
+        }
+
+        public void setData(T data) {
+            binding.description.setText(data.getName());
+
         }
     }
 

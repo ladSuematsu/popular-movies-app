@@ -31,17 +31,19 @@ import ladsoft.com.popularmoviesapp.model.Movie;
 import ladsoft.com.popularmoviesapp.model.MovieReview;
 import ladsoft.com.popularmoviesapp.model.MovieVideo;
 import ladsoft.com.popularmoviesapp.presenter.MovieDetailPresenterFactory;
-import ladsoft.com.popularmoviesapp.presenter.MovieDetailsPresenter;
+import ladsoft.com.popularmoviesapp.presenter.MovieDetailsMvp;
 import ladsoft.com.popularmoviesapp.util.DateUtils;
 import ladsoft.com.popularmoviesapp.util.UiUtils;
 
-public class MovieDetailsFragment extends Fragment implements MovieDetailsPresenter.Callback<Movie>,MovieVideosAdapter.Callback<MovieVideo> {
+public class MovieDetailsFragment extends Fragment implements MovieDetailsMvp.View<Movie, MovieReview, MovieVideo>,
+        MovieVideosAdapter.Callback<MovieVideo> {
 
     private static final String ARG_MOVIE = "arg_movie";
     private FragmentMovieDetailsBinding binding;
-    private MovieDetailsPresenter<Movie> presenter;
+    private MovieDetailsMvp.Presenter<Movie, MovieReview, MovieVideo> presenter;
     private MovieVideosAdapter<MovieVideo> movieVideosAdapter;
     private MovieReviewsAdapter<MovieReview> movieReviewsAdapter;
+    private MenuItem menuFavorite;
 
     public static MovieDetailsFragment newInstance(Movie movie) {
         Bundle args = new Bundle();
@@ -80,6 +82,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
         });
 
         binding.toolbar.inflateMenu(R.menu.movie_details_menu);
+        menuFavorite = binding.toolbar.getMenu().findItem(R.id.movie_details_menu_favorite);
         binding.toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -116,7 +119,6 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
 
 
         movieReviewsAdapter = new MovieReviewsAdapter<>(getLayoutInflater(savedInstanceState));
-//        movieReviewsAdapter.setCallback(this);
         binding.reviews.setNestedScrollingEnabled(false);
         binding.reviews.addItemDecoration(dividerItemDecoration);
         binding.reviews.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -169,22 +171,26 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(binding.appBarImage);
 
+        onFavoriteSuccessful(movie.isFavorite());
+
         presenter.loadVideos();
         presenter.loadReviews();
     }
 
     @Override
-    public void onVideoListLoaded(List<MovieVideo> videos) {
-        movieVideosAdapter.setDataSource(videos);
-        showVideosEmptyMessage(movieVideosAdapter.getItemCount() < 1);
-        showVideosLoadError(false);
-    }
-
-    @Override
-    public void onReviewListLoaded(List<MovieReview> reviews) {
+    public void refreshReviews(List<MovieReview> reviews) {
         movieReviewsAdapter.setDataSource(reviews);
         showReviewsEmptyMessage(movieReviewsAdapter.getItemCount() < 1);
         showReviewsLoadError(false);
+
+    }
+
+    @Override
+    public void refreshVideos(List<MovieVideo> videos) {
+        movieVideosAdapter.setDataSource(videos);
+        showVideosEmptyMessage(movieVideosAdapter.getItemCount() < 1);
+        showVideosLoadError(false);
+
     }
 
     @Override
@@ -193,35 +199,22 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
     }
 
     @Override
-    public void onFavoriteSuccessful() {
-
+    public void onFavoriteSuccessful(boolean favorite) {
+        menuFavorite.setIcon(favorite ? R.drawable.ic_grade_white : R.drawable.ic_grade_outline_white);
     }
 
     @Override
-    public void onError(MovieDetailsPresenter.ErrorType errorType) {
-        int messageResourceId = R.string.movie_details_error_generic;
-        switch(errorType) {
-            case VIDEO_DATA_LOAD_ERROR:
-                showVideosLoadError(true);
-                return;
-
-            case VIDEO_LINK_PARSE_ERROR:
-                messageResourceId = R.string.movie_details_error_invalid_video_link;
-                break;
-
-            case REVIEW_DATA_LOAD_ERROR:
-                showReviewsLoadError(true);
-                return;
-        }
-
+    public void showSnackbar(int messageResourceId) {
         UiUtils.showSnackbar(binding.getRoot(), getString(messageResourceId), null, Snackbar.LENGTH_SHORT, null);
     }
 
-    private void showVideosEmptyMessage(boolean show) {
+    @Override
+    public void showVideosEmptyMessage(boolean show) {
         binding.emptyVideos.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    private void showVideosLoadError(boolean show) {
+    @Override
+    public void showVideosLoadError(boolean show) {
         binding.errorVideos.setVisibility(show ? View.VISIBLE : View.GONE);
 
         if(show) {
@@ -229,11 +222,13 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsPresen
         }
     }
 
-    private void showReviewsEmptyMessage(boolean show) {
+    @Override
+    public void showReviewsEmptyMessage(boolean show) {
         binding.emptyReviews.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    private void showReviewsLoadError(boolean show) {
+    @Override
+    public void showReviewsLoadError(boolean show) {
         binding.errorReviews.setVisibility(show ? View.VISIBLE : View.GONE);
 
         if(show) {
