@@ -17,7 +17,7 @@ public class Movie implements Parcelable {
 
     public Movie() {}
 
-    public Movie(String posterPath, boolean adult, String overview, String releaseDate, List<Long> genreIds, long id, String originalTitle, String originalLanguage, String title, String backdropPath, double popularity, long voteCount, boolean video, int voteAverage) {
+    public Movie(String posterPath, boolean adult, String overview, String releaseDate, List<Long> genreIds, long id, String originalTitle, String originalLanguage, String title, String backdropPath, double popularity, long voteCount, boolean video, int voteAverage, boolean favorite) {
         this.posterPath = posterPath;
         this.adult = adult;
         this.overview = overview;
@@ -32,10 +32,11 @@ public class Movie implements Parcelable {
         this.voteCount = voteCount;
         this.video = video;
         this.voteAverage = voteAverage;
+        this.favorite = favorite;
     }
 
     @Expose @SerializedName("poster_path") private String posterPath;
-    @Expose @SerializedName("adult") private boolean adult;
+    @Expose @SerializedName("is_adult") private boolean adult;
     @Expose @SerializedName("overview") private String overview;
     @Expose @SerializedName("release_date") private String releaseDate;
     @Expose @SerializedName("genre_ids") private List<Long> genreIds;
@@ -48,6 +49,7 @@ public class Movie implements Parcelable {
     @Expose @SerializedName("vote_count") private long voteCount;
     @Expose @SerializedName("video") private boolean video;
     @Expose @SerializedName("vote_average") private double voteAverage;
+    private boolean favorite;
 
     protected Movie(Parcel in) {
         posterPath = in.readString();
@@ -63,6 +65,8 @@ public class Movie implements Parcelable {
         voteCount = in.readLong();
         video = in.readByte() != 0;
         voteAverage = in.readDouble();
+        favorite = in.readByte() != 0;
+//        in.readList(genreIds,  List.class.getClassLoader());
     }
 
     @Override
@@ -80,6 +84,8 @@ public class Movie implements Parcelable {
         dest.writeLong(voteCount);
         dest.writeByte((byte) (video ? 1 : 0));
         dest.writeDouble(voteAverage);
+        dest.writeByte((byte) (favorite ? 1 : 0));
+//        dest.writeList(genreIds);
     }
 
     @Override
@@ -159,5 +165,13 @@ public class Movie implements Parcelable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 }
