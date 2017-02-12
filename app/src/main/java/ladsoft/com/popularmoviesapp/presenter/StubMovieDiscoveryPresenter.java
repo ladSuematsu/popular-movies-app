@@ -1,6 +1,7 @@
 package ladsoft.com.popularmoviesapp.presenter;
 
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class StubMovieDiscoveryPresenter implements MovieDiscoveryPresenter<Movi
                         "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum " +
                         "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum " +
                         "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
-                "", null, 1, "Generic Movie Long Original Title", "en", "", "", 3.8D, 123L, false, 4);
+                "", null, 1, "Generic Movie Long Original Title", "en", "", "", 3.8D, 123L, false, 4, true);
 
         movies.add(movie);
         movies.add(movie);
