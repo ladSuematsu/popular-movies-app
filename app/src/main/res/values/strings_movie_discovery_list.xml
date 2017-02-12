@@ -5,6 +5,8 @@
     <string name="movie_discovery_sort_option_most_popular">Most Popular</string>
     <string name="movie_discovery_sort_option_highest_rated">Highest Rated</string>
     <string name="movie_discovery_sort_option_user_favorites">Favorites</string>
+    <string name="movie_discovery_error">Something went wrong</string>
+    <string name="movie_discovery_favorites_load_error">Error loading user favorite movies</string>
 
     <string-array name="movie_discovery_sort_selector_options">
         <item>@string/movie_discovery_sort_option_most_popular</item>

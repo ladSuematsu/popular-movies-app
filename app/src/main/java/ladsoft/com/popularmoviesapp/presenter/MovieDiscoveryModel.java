@@ -44,27 +44,11 @@ public class MovieDiscoveryModel implements MovieDiscoveryMvp.Model<Movie> {
                 call.enqueue(callback);
                 break;
 
-            case SORT_TYPE_USER_FAVORITES:
-                getUserFavoriteMovies();
-                break;
             case SORT_TYPE_MOST_POPULAR:
             default:
                 call = api.getMoviesPopular(apiKey);
                 call.enqueue(callback);
         }
-    }
-
-    private void getUserFavoriteMovies() {
-        Cursor result = contentResolver.query(MovieContract.MovieEntry.CONTENT_URI,
-                null,
-                MovieContract.MovieEntry.COLUMN_IS_FAVORITE + "=?",
-                new String[] {"1"},
-                null
-        );
-
-        Log.d(TAG, "Favorite movies: " + result.getCount());
-
-        presenter.onFavoritesLoaded(result);
     }
 
     private retrofit2.Callback<MovieSearchResult> callback = new retrofit2.Callback<MovieSearchResult>() {

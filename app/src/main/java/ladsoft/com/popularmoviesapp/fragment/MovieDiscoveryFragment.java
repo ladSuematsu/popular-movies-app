@@ -8,9 +8,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.View;
@@ -25,6 +29,7 @@ import ladsoft.com.popularmoviesapp.R;
 import ladsoft.com.popularmoviesapp.activity.MovieDetailsActivity;
 import ladsoft.com.popularmoviesapp.adapter.FavoritesAdapter;
 import ladsoft.com.popularmoviesapp.adapter.MovieDiscoveryAdapter;
+import ladsoft.com.popularmoviesapp.data.MovieContract;
 import ladsoft.com.popularmoviesapp.databinding.FragmentMainBinding;
 import ladsoft.com.popularmoviesapp.model.Movie;
 import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryMvp;
@@ -32,12 +37,17 @@ import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryPresenterFactory;
 import ladsoft.com.popularmoviesapp.util.UiUtils;
 import ladsoft.com.popularmoviesapp.view.layoutmanager.decoration.SimplePaddingDecoration;
 
-public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryMvp.View<Movie>, MovieDiscoveryAdapter.Callback<Movie> {
+public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryMvp.View<Movie>, MovieDiscoveryAdapter.Callback<Movie>,
+        LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final String TAG = MovieDiscoveryFragment.class.getSimpleName();
 
     private FragmentMainBinding binding;
     private MovieDiscoveryMvp.Presenter<Movie> presenter;
     private MovieDiscoveryAdapter<Movie> adapter;
     private FavoritesAdapter favoritesAdapter;
+    private static final int FAVORITES_LOADER = 0;
+    private Loader<Cursor> loader;
 
     public static MovieDiscoveryFragment newInstance() {
         return new MovieDiscoveryFragment();
@@ -94,6 +104,13 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryMv
         super.onActivityCreated(savedInstanceState);
 
         presenter = MovieDiscoveryPresenterFactory.create(this);
+        loader = getLoaderManager().initLoader(FAVORITES_LOADER, null, this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loader.forceLoad();
     }
 
     @Override
@@ -113,9 +130,9 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryMv
     }
 
     @Override
-    public void refreshFavorites(Cursor videos) {
+    public void showFavorites() {
+        Log.i(TAG, "Swapping adapter list with favorites adapter");
         binding.movieDiscoveryList.setAdapter(favoritesAdapter);
-        favoritesAdapter.swapCursor(videos);
     }
 
     @Override
@@ -125,12 +142,30 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryMv
     }
 
     @Override
-    public void showMoviesLoadError(boolean show) {
-
+    public Loader onCreateLoader(int id, Bundle args) {
+        Log.i(TAG, "Creating loader");
+        return new CursorLoader(getActivity(),
+                MovieContract.MovieEntry.CONTENT_URI,
+                null,
+                MovieContract.MovieEntry.COLUMN_IS_FAVORITE + "=?",
+                new String[] {"1"},
+                null);
     }
 
     @Override
-    public void showMoviesEmptyMessage(boolean show) {
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.i(TAG, "Loading cursor into favorites adapter");
 
+        if(data == null) {
+            showSnackbar(R.string.movie_discovery_favorites_load_error);
+        }
+
+        favoritesAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        Log.i(TAG, "Resetting favorites adapter");
+        favoritesAdapter.swapCursor(null);
     }
 }

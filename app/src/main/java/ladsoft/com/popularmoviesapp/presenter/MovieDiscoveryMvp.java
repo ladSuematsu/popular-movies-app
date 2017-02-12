@@ -23,16 +23,13 @@ public interface MovieDiscoveryMvp {
         Context getContext();
         void loadData(int sortType);
         void onDataLoaded(List<S> data);
-        void onFavoritesLoaded(Cursor data);
         void onError(MovieDetailsMvp.ErrorType errorType);
     }
 
     interface View<S> {
         void refreshMovies(List<S> videos);
-        void refreshFavorites(Cursor videos);
         void showSnackbar(int messageResourceId);
-        void showMoviesLoadError(boolean show);
-        void showMoviesEmptyMessage(boolean show);
+        void showFavorites();
     }
 
 }
