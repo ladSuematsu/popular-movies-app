@@ -2,6 +2,7 @@ package ladsoft.com.popularmoviesapp.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,22 +19,25 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import java.util.List;
+
 import ladsoft.com.popularmoviesapp.R;
 import ladsoft.com.popularmoviesapp.activity.MovieDetailsActivity;
+import ladsoft.com.popularmoviesapp.adapter.FavoritesAdapter;
 import ladsoft.com.popularmoviesapp.adapter.MovieDiscoveryAdapter;
-import ladsoft.com.popularmoviesapp.api.parser.MovieSearchResult;
 import ladsoft.com.popularmoviesapp.databinding.FragmentMainBinding;
 import ladsoft.com.popularmoviesapp.model.Movie;
-import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryPresenter;
+import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryMvp;
 import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryPresenterFactory;
 import ladsoft.com.popularmoviesapp.util.UiUtils;
 import ladsoft.com.popularmoviesapp.view.layoutmanager.decoration.SimplePaddingDecoration;
 
-public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryPresenter.Callback<MovieSearchResult>,MovieDiscoveryAdapter.Callback<Movie> {
+public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryMvp.View<Movie>, MovieDiscoveryAdapter.Callback<Movie> {
 
     private FragmentMainBinding binding;
-    private MovieDiscoveryPresenter<Movie> presenter;
+    private MovieDiscoveryMvp.Presenter<Movie> presenter;
     private MovieDiscoveryAdapter<Movie> adapter;
+    private FavoritesAdapter favoritesAdapter;
 
     public static MovieDiscoveryFragment newInstance() {
         return new MovieDiscoveryFragment();
@@ -50,8 +54,12 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryPr
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adapter = new MovieDiscoveryAdapter<>(getLayoutInflater(savedInstanceState));
+        LayoutInflater inflater = getLayoutInflater(savedInstanceState);
+        adapter = new MovieDiscoveryAdapter<>(inflater);
         adapter.setCallback(this);
+
+        favoritesAdapter = new FavoritesAdapter(inflater, null);
+        favoritesAdapter.setCallback(this);
 
         WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         int rotation = windowManager.getDefaultDisplay().getRotation();
@@ -89,11 +97,6 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryPr
     }
 
     @Override
-    public void onDataLoaded(MovieSearchResult movies) {
-        adapter.setDataSource(movies.getResult());
-    }
-
-    @Override
     public void onItemClick(View view, Movie movie) {
         Intent intent = new Intent(getContext(), MovieDetailsActivity.class);
         intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE, movie);
@@ -104,13 +107,30 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryPr
     }
 
     @Override
-    public void onPresenterError(MovieDiscoveryPresenter.ErrorType errorType) {
-        switch (errorType) {
-            case DATA_LOAD_ERROR:
-                UiUtils.showSnackbar(binding.getRoot(), getString(R.string.movie_discovery_data_load_error),
-                        getString(R.string.movie_discovery_ok), Snackbar.LENGTH_SHORT, null);
-            break;
-        }
+    public void refreshMovies(List<Movie> videos) {
+        binding.movieDiscoveryList.setAdapter(adapter);
+        adapter.setDataSource(videos);
     }
 
+    @Override
+    public void refreshFavorites(Cursor videos) {
+        binding.movieDiscoveryList.setAdapter(favoritesAdapter);
+        favoritesAdapter.swapCursor(videos);
+    }
+
+    @Override
+    public void showSnackbar(int messageResourceId) {
+        UiUtils.showSnackbar(binding.getRoot(), getString(messageResourceId),
+                getString(R.string.movie_discovery_ok), Snackbar.LENGTH_SHORT, null);
+    }
+
+    @Override
+    public void showMoviesLoadError(boolean show) {
+
+    }
+
+    @Override
+    public void showMoviesEmptyMessage(boolean show) {
+
+    }
 }

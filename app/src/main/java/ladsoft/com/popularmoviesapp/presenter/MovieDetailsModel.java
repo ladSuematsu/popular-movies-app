@@ -81,7 +81,7 @@ public class MovieDetailsModel implements MovieDetailsMvp.Model<Movie> {
             result = contentResolver.update(MovieContract.MovieEntry.buildMovieUri(movie.getId()), values, null, null) > 0;
         } else {
             values.put(MovieContract.MovieEntry.COLUMN_ID, movie.getId());
-            values.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
+            values.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, movie.getRawPosterPath());
             values.put(MovieContract.MovieEntry.COLUMN_IS_ADULT, movie.isAdult());
             values.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, movie.getOverview());
             values.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, movie.getReleaseDate());

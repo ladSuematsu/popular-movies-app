@@ -101,6 +101,7 @@ public class MovieDetailsPresenter implements MovieDetailsMvp.Presenter<Movie, M
 
     @Override
     public void setFavorite() {
+        movie.setFavorite(!movie.isFavorite());
         model.saveDetails(movie);
     }
 

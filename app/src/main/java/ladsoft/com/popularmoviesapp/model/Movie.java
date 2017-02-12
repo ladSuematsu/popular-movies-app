@@ -1,19 +1,38 @@
 package ladsoft.com.popularmoviesapp.model;
 
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ladsoft.com.popularmoviesapp.BuildConfig;
+import ladsoft.com.popularmoviesapp.data.MovieContract;
 
 public class Movie implements Parcelable {
 
     private static final String baseImageUrl = BuildConfig.BASE_IMAGE_URL;
+
+    @Expose @SerializedName("poster_path") private String posterPath;
+    @Expose @SerializedName("is_adult") private boolean adult;
+    @Expose @SerializedName("overview") private String overview;
+    @Expose @SerializedName("release_date") private String releaseDate;
+    @Expose @SerializedName("genre_ids") private List<Long> genreIds;
+    @Expose @SerializedName("id") private long id;
+    @Expose @SerializedName("original_title") private String originalTitle;
+    @Expose @SerializedName("original_language") private String originalLanguage;
+    @Expose @SerializedName("title") private String title;
+    @Expose @SerializedName("backdrop_path") private String backdropPath;
+    @Expose @SerializedName("popularity") private double popularity;
+    @Expose @SerializedName("vote_count") private long voteCount;
+    @Expose @SerializedName("video") private boolean video;
+    @Expose @SerializedName("vote_average") private double voteAverage;
+    private boolean favorite;
 
     public Movie() {}
 
@@ -35,21 +54,23 @@ public class Movie implements Parcelable {
         this.favorite = favorite;
     }
 
-    @Expose @SerializedName("poster_path") private String posterPath;
-    @Expose @SerializedName("is_adult") private boolean adult;
-    @Expose @SerializedName("overview") private String overview;
-    @Expose @SerializedName("release_date") private String releaseDate;
-    @Expose @SerializedName("genre_ids") private List<Long> genreIds;
-    @Expose @SerializedName("id") private long id;
-    @Expose @SerializedName("original_title") private String originalTitle;
-    @Expose @SerializedName("original_language") private String originalLanguage;
-    @Expose @SerializedName("title") private String title;
-    @Expose @SerializedName("backdrop_path") private String backdropPath;
-    @Expose @SerializedName("popularity") private double popularity;
-    @Expose @SerializedName("vote_count") private long voteCount;
-    @Expose @SerializedName("video") private boolean video;
-    @Expose @SerializedName("vote_average") private double voteAverage;
-    private boolean favorite;
+    public Movie(Cursor cursor) {
+        this.id = cursor.getLong(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_ID));
+        this.posterPath = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER_PATH));
+        this.adult = cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_IS_ADULT)) == 1;
+        this.overview = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_OVERVIEW));
+        this.releaseDate =  cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_RELEASE_DATE));
+        this.genreIds =  new ArrayList<>();
+        this.originalTitle =  cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_ORIGINAL_TITLE));
+        this.originalLanguage =  cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_ORIGINAL_LANGUAGE));
+        this.title =  cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_TITLE));
+        this.backdropPath =  cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH));
+        this.popularity =  cursor.getDouble(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POPULARITY));
+        this.voteCount =  cursor.getLong(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_COUNT));
+        this.video =  cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VIDEO)) == 1;
+        this.voteAverage =  cursor.getDouble(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE));
+        this.favorite =  cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_IS_FAVORITE)) == 1;
+    }
 
     protected Movie(Parcel in) {
         posterPath = in.readString();
@@ -107,6 +128,10 @@ public class Movie implements Parcelable {
 
     public String getPosterPath() {
         return baseImageUrl + posterPath;
+    }
+
+    public String getRawPosterPath() {
+        return posterPath;
     }
 
     public boolean isAdult() {
