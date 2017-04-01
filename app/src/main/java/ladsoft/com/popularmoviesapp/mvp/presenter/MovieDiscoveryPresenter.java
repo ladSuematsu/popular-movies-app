@@ -11,13 +11,13 @@ import ladsoft.com.popularmoviesapp.mvp.MovieDiscoveryMvp;
 
 import static ladsoft.com.popularmoviesapp.mvp.MovieDiscoveryMvp.SORT_TYPE_USER_FAVORITES;
 
-public class DefaultMovieDiscoveryPresenter extends MvpPresenter<MovieDiscoveryMvp.View<Movie>>
+public class MovieDiscoveryPresenter extends MvpPresenter<MovieDiscoveryMvp.View<Movie>>
 implements MovieDiscoveryMvp.Presenter<MovieDiscoveryMvp.View<Movie>>,  MovieDiscoveryMvp.Model.ModelCallback<Movie> {
-    private static final String TAG = DefaultMovieDiscoveryPresenter.class.getSimpleName();
+    private static final String TAG = MovieDiscoveryPresenter.class.getSimpleName();
     private MovieDiscoveryMvp.Model<Movie> model;
     private MovieSearchResult result;
 
-    public DefaultMovieDiscoveryPresenter(MovieDiscoveryMvp.Model<Movie> model) {
+    public MovieDiscoveryPresenter(MovieDiscoveryMvp.Model<Movie> model) {
         this.model = model;
         this.model.attach(this);
     }
