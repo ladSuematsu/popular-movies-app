@@ -4,6 +4,7 @@ package ladsoft.com.popularmoviesapp.mvp;
 import android.support.annotation.NonNull;
 
 import ladsoft.com.popularmoviesapp.model.Movie;
+import ladsoft.com.popularmoviesapp.mvp.presenter.DefaultMovieDiscoveryPresenter;
 
 public class MovieDiscoveryPresenterFactory {
 

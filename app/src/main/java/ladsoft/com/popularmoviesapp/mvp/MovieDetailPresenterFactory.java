@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import ladsoft.com.popularmoviesapp.model.Movie;
 import ladsoft.com.popularmoviesapp.model.MovieReview;
 import ladsoft.com.popularmoviesapp.model.MovieVideo;
+import ladsoft.com.popularmoviesapp.mvp.presenter.MovieDetailsPresenter;
 
 public class MovieDetailPresenterFactory {
     public static MovieDetailsMvp.Presenter<Movie, MovieReview, MovieVideo> create(@NonNull  MovieDetailsMvp.View<Movie, MovieReview, MovieVideo> view) {

@@ -1,4 +1,4 @@
-package ladsoft.com.popularmoviesapp.mvp;
+package ladsoft.com.popularmoviesapp.mvp.presenter;
 
 import java.util.List;
 
@@ -6,6 +6,8 @@ import ladsoft.com.popularmoviesapp.R;
 import ladsoft.com.popularmoviesapp.api.parser.MovieSearchResult;
 import ladsoft.com.popularmoviesapp.core.mvp.presenter.MvpPresenter;
 import ladsoft.com.popularmoviesapp.model.Movie;
+import ladsoft.com.popularmoviesapp.mvp.MovieDetailsMvp;
+import ladsoft.com.popularmoviesapp.mvp.MovieDiscoveryMvp;
 
 import static ladsoft.com.popularmoviesapp.mvp.MovieDiscoveryMvp.SORT_TYPE_USER_FAVORITES;
 
