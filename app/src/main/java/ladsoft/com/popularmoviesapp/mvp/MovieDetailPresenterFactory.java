@@ -1,4 +1,4 @@
-package ladsoft.com.popularmoviesapp.presenter;
+package ladsoft.com.popularmoviesapp.mvp;
 
 
 import android.support.annotation.NonNull;

@@ -1,4 +1,4 @@
-package ladsoft.com.popularmoviesapp.presenter;
+package ladsoft.com.popularmoviesapp.mvp;
 
 
 import android.content.Context;
@@ -15,7 +15,7 @@ import ladsoft.com.popularmoviesapp.model.Movie;
 import ladsoft.com.popularmoviesapp.model.MovieReview;
 import ladsoft.com.popularmoviesapp.model.MovieVideo;
 
-import static ladsoft.com.popularmoviesapp.presenter.MovieDetailsMvp.ErrorType.VIDEO_LINK_PARSE_ERROR;
+import static ladsoft.com.popularmoviesapp.mvp.MovieDetailsMvp.ErrorType.VIDEO_LINK_PARSE_ERROR;
 
 public class MovieDetailsPresenter implements MovieDetailsMvp.Presenter<Movie, MovieReview, MovieVideo> {
     private static final String TAG = MovieDetailsPresenter.class.getSimpleName();

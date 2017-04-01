@@ -1,4 +1,4 @@
-package ladsoft.com.popularmoviesapp.presenter;
+package ladsoft.com.popularmoviesapp.mvp;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import ladsoft.com.popularmoviesapp.api.parser.MovieSearchResult;
 import ladsoft.com.popularmoviesapp.core.mvp.presenter.MvpPresenter;
 import ladsoft.com.popularmoviesapp.model.Movie;
 
-import static ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryMvp.SORT_TYPE_USER_FAVORITES;
+import static ladsoft.com.popularmoviesapp.mvp.MovieDiscoveryMvp.SORT_TYPE_USER_FAVORITES;
 
 public class DefaultMovieDiscoveryPresenter extends MvpPresenter<MovieDiscoveryMvp.View<Movie>>
 implements MovieDiscoveryMvp.Presenter<MovieDiscoveryMvp.View<Movie>>,  MovieDiscoveryMvp.Model.ModelCallback<Movie> {

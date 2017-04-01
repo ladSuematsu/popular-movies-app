@@ -1,8 +1,7 @@
-package ladsoft.com.popularmoviesapp.presenter;
+package ladsoft.com.popularmoviesapp.mvp;
 
 
 import android.content.ContentResolver;
-import android.database.Cursor;
 import android.util.Log;
 
 import ladsoft.com.popularmoviesapp.BuildConfig;
@@ -10,15 +9,13 @@ import ladsoft.com.popularmoviesapp.api.TheMovieDbApi;
 import ladsoft.com.popularmoviesapp.api.TheMovieDbApiModule;
 import ladsoft.com.popularmoviesapp.api.parser.MovieSearchResult;
 import ladsoft.com.popularmoviesapp.core.mvp.model.MvpModel;
-import ladsoft.com.popularmoviesapp.data.MovieContract;
 import ladsoft.com.popularmoviesapp.model.Movie;
 import retrofit2.Call;
 import retrofit2.Response;
 
-import static ladsoft.com.popularmoviesapp.presenter.MovieDetailsMvp.ErrorType.DATA_LOAD_ERROR;
-import static ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryMvp.SORT_TYPE_MOST_POPULAR;
-import static ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryMvp.SORT_TYPE_TOP_RATED;
-import static ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryMvp.SORT_TYPE_USER_FAVORITES;
+import static ladsoft.com.popularmoviesapp.mvp.MovieDetailsMvp.ErrorType.DATA_LOAD_ERROR;
+import static ladsoft.com.popularmoviesapp.mvp.MovieDiscoveryMvp.SORT_TYPE_MOST_POPULAR;
+import static ladsoft.com.popularmoviesapp.mvp.MovieDiscoveryMvp.SORT_TYPE_TOP_RATED;
 
 
 public class MovieDiscoveryModel extends MvpModel<MovieDiscoveryMvp.Model.ModelCallback<Movie>> implements MovieDiscoveryMvp.Model<Movie> {

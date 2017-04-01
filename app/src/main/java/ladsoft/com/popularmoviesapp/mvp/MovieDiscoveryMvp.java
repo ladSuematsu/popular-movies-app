@@ -1,8 +1,5 @@
-package ladsoft.com.popularmoviesapp.presenter;
+package ladsoft.com.popularmoviesapp.mvp;
 
-
-import android.content.Context;
-import android.database.Cursor;
 
 import java.util.List;
 

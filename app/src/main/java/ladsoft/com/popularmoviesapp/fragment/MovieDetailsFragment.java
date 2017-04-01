@@ -30,8 +30,8 @@ import ladsoft.com.popularmoviesapp.databinding.FragmentMovieDetailsBinding;
 import ladsoft.com.popularmoviesapp.model.Movie;
 import ladsoft.com.popularmoviesapp.model.MovieReview;
 import ladsoft.com.popularmoviesapp.model.MovieVideo;
-import ladsoft.com.popularmoviesapp.presenter.MovieDetailPresenterFactory;
-import ladsoft.com.popularmoviesapp.presenter.MovieDetailsMvp;
+import ladsoft.com.popularmoviesapp.mvp.MovieDetailPresenterFactory;
+import ladsoft.com.popularmoviesapp.mvp.MovieDetailsMvp;
 import ladsoft.com.popularmoviesapp.util.DateUtils;
 import ladsoft.com.popularmoviesapp.util.UiUtils;
 

@@ -1,9 +1,8 @@
-package ladsoft.com.popularmoviesapp.presenter;
+package ladsoft.com.popularmoviesapp.mvp;
 
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
@@ -19,9 +18,9 @@ import ladsoft.com.popularmoviesapp.model.MovieVideo;
 import retrofit2.Call;
 import retrofit2.Response;
 
-import static ladsoft.com.popularmoviesapp.presenter.MovieDetailsMvp.ErrorType.FAVORITE_ERROR;
-import static ladsoft.com.popularmoviesapp.presenter.MovieDetailsMvp.ErrorType.REVIEW_DATA_LOAD_ERROR;
-import static ladsoft.com.popularmoviesapp.presenter.MovieDetailsMvp.ErrorType.VIDEO_DATA_LOAD_ERROR;
+import static ladsoft.com.popularmoviesapp.mvp.MovieDetailsMvp.ErrorType.FAVORITE_ERROR;
+import static ladsoft.com.popularmoviesapp.mvp.MovieDetailsMvp.ErrorType.REVIEW_DATA_LOAD_ERROR;
+import static ladsoft.com.popularmoviesapp.mvp.MovieDetailsMvp.ErrorType.VIDEO_DATA_LOAD_ERROR;
 
 public class MovieDetailsModel implements MovieDetailsMvp.Model<Movie> {
     private static final String apiKey = BuildConfig.API_KEY;

@@ -1,10 +1,5 @@
 package ladsoft.com.popularmoviesapp.core.mvp;
 
-import java.util.List;
-
-import ladsoft.com.popularmoviesapp.presenter.MovieDetailsMvp;
-import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryMvp;
-
 public interface Mvp {
 
         interface Presenter<V> {

@@ -1,12 +1,10 @@
-package ladsoft.com.popularmoviesapp.presenter;
+package ladsoft.com.popularmoviesapp.mvp;
 
 
 import android.content.Context;
 import android.net.Uri;
 
 import java.util.List;
-
-import ladsoft.com.popularmoviesapp.model.MovieVideo;
 
 public interface MovieDetailsMvp {
     enum ErrorType {
