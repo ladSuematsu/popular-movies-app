@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ladsoft.com.popularmoviesapp.R;
@@ -32,6 +35,7 @@ import ladsoft.com.popularmoviesapp.adapter.MovieDiscoveryAdapter;
 import ladsoft.com.popularmoviesapp.data.MovieContract;
 import ladsoft.com.popularmoviesapp.databinding.FragmentMainBinding;
 import ladsoft.com.popularmoviesapp.model.Movie;
+import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryModel;
 import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryMvp;
 import ladsoft.com.popularmoviesapp.presenter.MovieDiscoveryPresenterFactory;
 import ladsoft.com.popularmoviesapp.util.UiUtils;
@@ -41,9 +45,12 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryMv
         LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = MovieDiscoveryFragment.class.getSimpleName();
+    private String STATE_SELECTED_FILTER = "state_selected_filter";
+    private String STATE_LIST_CONTENT = "state_list_content";
+    private String STATE_LIST = "state_list";
 
     private FragmentMainBinding binding;
-    private MovieDiscoveryMvp.Presenter<Movie> presenter;
+    private MovieDiscoveryMvp.Presenter<MovieDiscoveryMvp.View<Movie>> presenter;
     private MovieDiscoveryAdapter<Movie> adapter;
     private FavoritesAdapter favoritesAdapter;
     private static final int FAVORITES_LOADER = 0;
@@ -86,31 +93,47 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryMv
                 R.array.movie_discovery_sort_selector_options, R.layout.spinner_item_inverse);
         sortSelectorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.sortBySelector.setAdapter(sortSelectorAdapter);
-        binding.sortBySelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                adapter.clearData();
-                presenter.loadData(i);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });
+        binding.sortBySelector.setOnTouchListener(selectorListener);
+        binding.sortBySelector.setOnItemSelectedListener(selectorListener);
     }
 
+    Parcelable listInstanceState;
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        presenter = MovieDiscoveryPresenterFactory.create(this);
+        presenter = MovieDiscoveryPresenterFactory.create(new MovieDiscoveryModel(getContext().getContentResolver()));
+        presenter.attachView(this);
         loader = getLoaderManager().initLoader(FAVORITES_LOADER, null, this);
+
+        if(savedInstanceState == null) {
+            presenter.loadData(MovieDiscoveryMvp.SORT_TYPE_MOST_POPULAR);
+        } else {
+            int selectedFilterItemPosition = savedInstanceState.getInt(STATE_SELECTED_FILTER);
+            List<Movie> movies = savedInstanceState.getParcelableArrayList(STATE_LIST_CONTENT);
+            adapter.setDatasource(movies);
+
+            listInstanceState = savedInstanceState.getParcelable(STATE_LIST);
+            if (selectedFilterItemPosition == MovieDiscoveryMvp.SORT_TYPE_USER_FAVORITES) {
+                binding.movieDiscoveryList.setAdapter(favoritesAdapter);
+            } else {
+                binding.movieDiscoveryList.getLayoutManager().onRestoreInstanceState(listInstanceState);
+            }
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         loader.forceLoad();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STATE_SELECTED_FILTER, binding.sortBySelector.getSelectedItemPosition());
+        outState.putParcelableArrayList(STATE_LIST_CONTENT, (ArrayList<Movie>) adapter.getDatasource());
+        outState.putParcelable(STATE_LIST, binding.movieDiscoveryList.getLayoutManager().onSaveInstanceState());
     }
 
     @Override
@@ -126,7 +149,7 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryMv
     @Override
     public void refreshMovies(List<Movie> videos) {
         binding.movieDiscoveryList.setAdapter(adapter);
-        adapter.setDataSource(videos);
+        adapter.setDatasource(videos);
     }
 
     @Override
@@ -161,11 +184,38 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryMv
         }
 
         favoritesAdapter.swapCursor(data);
+        binding.movieDiscoveryList.getLayoutManager().onRestoreInstanceState(listInstanceState);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         Log.i(TAG, "Resetting favorites adapter");
         favoritesAdapter.swapCursor(null);
+    }
+
+    SelectorListener selectorListener = new SelectorListener();
+    private class SelectorListener implements AdapterView.OnItemSelectedListener,
+        View.OnTouchListener {
+        private boolean userInteraction;
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            userInteraction = true;
+            return false;
+        }
+
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            if(userInteraction) {
+                adapter.clearData();
+                presenter.loadData(i);
+            }
+
+            userInteraction = false;
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+        }
     }
 }

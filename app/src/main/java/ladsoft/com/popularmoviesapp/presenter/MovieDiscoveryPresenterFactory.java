@@ -9,11 +9,11 @@ import ladsoft.com.popularmoviesapp.model.Movie;
 
 public class MovieDiscoveryPresenterFactory {
 
-    public static MovieDiscoveryMvp.Presenter create(@NonNull MovieDiscoveryMvp.View<Movie> view) {
+    public static MovieDiscoveryMvp.Presenter create(@NonNull MovieDiscoveryMvp.Model<Movie> model) {
 //        if(BuildConfig.DATA_STUB_MODE) {
 //            return new StubMovieDiscoveryPresenter(callback);
 //        } else {
-            return new DefaultMovieDiscoveryPresenter(view);
+            return new DefaultMovieDiscoveryPresenter(model);
 //        }
     }
 }

@@ -61,9 +61,13 @@ public class MovieDiscoveryAdapter<T extends Movie> extends RecyclerView.Adapter
     @Override
     public long getItemId(int position) { return dataSource.get(position).getId(); }
 
-    public void setDataSource(@NonNull List<T> dataSource) {
+    public void setDatasource(@NonNull List<T> dataSource) {
         this.dataSource = dataSource;
         this.notifyDataSetChanged();
+    }
+
+    public List<T> getDatasource() {
+        return this.dataSource;
     }
 
     public void clearData() {
