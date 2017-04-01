@@ -1,4 +1,4 @@
-package ladsoft.com.popularmoviesapp.mvp;
+package ladsoft.com.popularmoviesapp.mvp.model;
 
 
 import android.content.ContentResolver;
@@ -15,6 +15,7 @@ import ladsoft.com.popularmoviesapp.data.MovieContract;
 import ladsoft.com.popularmoviesapp.model.Movie;
 import ladsoft.com.popularmoviesapp.model.MovieReview;
 import ladsoft.com.popularmoviesapp.model.MovieVideo;
+import ladsoft.com.popularmoviesapp.mvp.MovieDetailsMvp;
 import retrofit2.Call;
 import retrofit2.Response;
 

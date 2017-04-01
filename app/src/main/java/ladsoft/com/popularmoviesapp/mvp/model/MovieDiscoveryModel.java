@@ -1,4 +1,4 @@
-package ladsoft.com.popularmoviesapp.mvp;
+package ladsoft.com.popularmoviesapp.mvp.model;
 
 
 import android.content.ContentResolver;
@@ -10,6 +10,7 @@ import ladsoft.com.popularmoviesapp.api.TheMovieDbApiModule;
 import ladsoft.com.popularmoviesapp.api.parser.MovieSearchResult;
 import ladsoft.com.popularmoviesapp.core.mvp.model.MvpModel;
 import ladsoft.com.popularmoviesapp.model.Movie;
+import ladsoft.com.popularmoviesapp.mvp.MovieDiscoveryMvp;
 import retrofit2.Call;
 import retrofit2.Response;
 

@@ -14,6 +14,7 @@ import ladsoft.com.popularmoviesapp.R;
 import ladsoft.com.popularmoviesapp.model.Movie;
 import ladsoft.com.popularmoviesapp.model.MovieReview;
 import ladsoft.com.popularmoviesapp.model.MovieVideo;
+import ladsoft.com.popularmoviesapp.mvp.model.MovieDetailsModel;
 
 import static ladsoft.com.popularmoviesapp.mvp.MovieDetailsMvp.ErrorType.VIDEO_LINK_PARSE_ERROR;
 

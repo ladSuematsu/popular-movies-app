@@ -35,7 +35,7 @@ import ladsoft.com.popularmoviesapp.adapter.MovieDiscoveryAdapter;
 import ladsoft.com.popularmoviesapp.data.MovieContract;
 import ladsoft.com.popularmoviesapp.databinding.FragmentMainBinding;
 import ladsoft.com.popularmoviesapp.model.Movie;
-import ladsoft.com.popularmoviesapp.mvp.MovieDiscoveryModel;
+import ladsoft.com.popularmoviesapp.mvp.model.MovieDiscoveryModel;
 import ladsoft.com.popularmoviesapp.mvp.MovieDiscoveryMvp;
 import ladsoft.com.popularmoviesapp.mvp.MovieDiscoveryPresenterFactory;
 import ladsoft.com.popularmoviesapp.util.UiUtils;
