@@ -55,6 +55,7 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryMv
     private FavoritesAdapter favoritesAdapter;
     private static final int FAVORITES_LOADER = 0;
     private Loader<Cursor> loader;
+    private int selectedFilterItemPosition;
 
     public static MovieDiscoveryFragment newInstance() {
         return new MovieDiscoveryFragment();
@@ -109,7 +110,7 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryMv
         if(savedInstanceState == null) {
             presenter.loadData(MovieDiscoveryMvp.SORT_TYPE_MOST_POPULAR);
         } else {
-            int selectedFilterItemPosition = savedInstanceState.getInt(STATE_SELECTED_FILTER);
+            selectedFilterItemPosition = savedInstanceState.getInt(STATE_SELECTED_FILTER);
             List<Movie> movies = savedInstanceState.getParcelableArrayList(STATE_LIST_CONTENT);
             adapter.setDatasource(movies);
 
@@ -125,7 +126,9 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryMv
     @Override
     public void onResume() {
         super.onResume();
-        loader.forceLoad();
+        if (selectedFilterItemPosition == MovieDiscoveryMvp.SORT_TYPE_USER_FAVORITES) {
+            loader.forceLoad();
+        }
     }
 
     @Override
@@ -134,6 +137,12 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryMv
         outState.putInt(STATE_SELECTED_FILTER, binding.sortBySelector.getSelectedItemPosition());
         outState.putParcelableArrayList(STATE_LIST_CONTENT, (ArrayList<Movie>) adapter.getDatasource());
         outState.putParcelable(STATE_LIST, binding.movieDiscoveryList.getLayoutManager().onSaveInstanceState());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.detachView();
     }
 
     @Override
@@ -207,6 +216,7 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryMv
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
             if(userInteraction) {
+                selectedFilterItemPosition = i;
                 adapter.clearData();
                 presenter.loadData(i);
             }
