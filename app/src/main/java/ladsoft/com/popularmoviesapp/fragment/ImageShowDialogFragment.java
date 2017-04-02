@@ -16,7 +16,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import ladsoft.com.popularmoviesapp.R;
 import ladsoft.com.popularmoviesapp.databinding.ImageDialogBinding;
-import ladsoft.com.popularmoviesapp.util.UiUtils;
 
 public class ImageShowDialogFragment extends DialogFragment {
 

@@ -30,8 +30,9 @@ import ladsoft.com.popularmoviesapp.databinding.FragmentMovieDetailsBinding;
 import ladsoft.com.popularmoviesapp.model.Movie;
 import ladsoft.com.popularmoviesapp.model.MovieReview;
 import ladsoft.com.popularmoviesapp.model.MovieVideo;
-import ladsoft.com.popularmoviesapp.presenter.MovieDetailPresenterFactory;
-import ladsoft.com.popularmoviesapp.presenter.MovieDetailsMvp;
+import ladsoft.com.popularmoviesapp.mvp.MovieDetailPresenterFactory;
+import ladsoft.com.popularmoviesapp.mvp.MovieDetailsMvp;
+import ladsoft.com.popularmoviesapp.mvp.model.MovieDetailsModel;
 import ladsoft.com.popularmoviesapp.util.DateUtils;
 import ladsoft.com.popularmoviesapp.util.UiUtils;
 
@@ -59,7 +60,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsMvp.Vi
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        presenter = MovieDetailPresenterFactory.create(this);
+        presenter = MovieDetailPresenterFactory.create(new MovieDetailsModel(getContext().getContentResolver()));
     }
 
     @Nullable
@@ -141,7 +142,14 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsMvp.Vi
             movie = args.getParcelable(ARG_MOVIE);
         }
 
+        presenter.attachView(this);
         presenter.loadData(movie);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        presenter.detachView();
     }
 
     private void showFullSizePoster() {

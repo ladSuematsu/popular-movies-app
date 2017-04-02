@@ -1,10 +1,9 @@
-package ladsoft.com.popularmoviesapp.presenter;
+package ladsoft.com.popularmoviesapp.mvp;
 
-
-import android.content.Context;
-import android.database.Cursor;
 
 import java.util.List;
+
+import ladsoft.com.popularmoviesapp.core.mvp.Mvp;
 
 public interface MovieDiscoveryMvp {
     int SORT_TYPE_MOST_POPULAR = 0;
@@ -15,15 +14,17 @@ public interface MovieDiscoveryMvp {
         DATA_LOAD_ERROR,
     }
 
-    interface Model<T> {
+    interface Model<T> extends Mvp.Model<Model.ModelCallback<T>>{
         void loadMovies(int type);
+
+        interface ModelCallback<T> extends Mvp.Model.ModelCallback {
+            void onDataLoaded(List<T> data);
+            void onError(MovieDetailsMvp.ErrorType errorType);
+        }
     }
 
-    interface Presenter<S> {
-        Context getContext();
+    interface Presenter<V> extends Mvp.Presenter<V> {
         void loadData(int sortType);
-        void onDataLoaded(List<S> data);
-        void onError(MovieDetailsMvp.ErrorType errorType);
     }
 
     interface View<S> {
