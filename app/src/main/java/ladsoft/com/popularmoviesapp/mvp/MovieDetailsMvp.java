@@ -6,6 +6,8 @@ import android.net.Uri;
 
 import java.util.List;
 
+import ladsoft.com.popularmoviesapp.core.mvp.Mvp;
+
 public interface MovieDetailsMvp {
     enum ErrorType {
         DATA_LOAD_ERROR,
@@ -15,26 +17,28 @@ public interface MovieDetailsMvp {
         FAVORITE_ERROR
     }
 
-    interface Model<T> {
-        void loadDetails(T data);
+    interface Model<S, T, U> extends Mvp.Model<Model.ModelCallback<S, T, U>>{
+        void loadDetails(S data);
         void loadReviews(long id);
         void loadVideos(long id);
-        void saveDetails(T data);
+        void saveDetails(S data);
+
+        interface ModelCallback<S, T, U> extends Mvp.Model.ModelCallback {
+            void onError(MovieDetailsMvp.ErrorType errorType);
+            void onMovieDetailsLoaded(S data);
+            void onReviewsLoaded(List<T> reviews);
+            void onVideosLoaded(List<U> videos);
+            void onSaved();
+        }
     }
 
-    interface Presenter<S, T, U> {
-        Context getContext();
+    interface Presenter<S, T, U> extends Mvp.Presenter<View<S,T,U>>{
         void loadData(S movie);
         void loadVideos();
         void loadReviews();
-        void onMovieDetailsLoaded(S data);
-        void onReviewsLoaded(List<T> reviews);
-        void onVideosLoaded(List<U> videos);
-        void onSaved();
         void onMovieVideoSelected(Context context, U video);
         String getPosterPath();
         void setFavorite();
-        void onError(ErrorType errorType);
     }
 
     interface View<S, T, U> {

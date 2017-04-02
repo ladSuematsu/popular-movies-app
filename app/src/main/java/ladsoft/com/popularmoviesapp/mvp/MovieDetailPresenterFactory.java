@@ -9,11 +9,11 @@ import ladsoft.com.popularmoviesapp.model.MovieVideo;
 import ladsoft.com.popularmoviesapp.mvp.presenter.MovieDetailsPresenter;
 
 public class MovieDetailPresenterFactory {
-    public static MovieDetailsMvp.Presenter<Movie, MovieReview, MovieVideo> create(@NonNull  MovieDetailsMvp.View<Movie, MovieReview, MovieVideo> view) {
+    public static MovieDetailsMvp.Presenter<Movie, MovieReview, MovieVideo> create(@NonNull MovieDetailsMvp.Model<Movie, MovieReview, MovieVideo> model) {
 //        if(BuildConfig.DATA_STUB_MODE) {
 //
 //        } else {
-            return new MovieDetailsPresenter(view);
+            return new MovieDetailsPresenter(model);
 //        }
     }
 }
