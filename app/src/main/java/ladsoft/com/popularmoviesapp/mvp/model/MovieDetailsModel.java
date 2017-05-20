@@ -1,9 +1,8 @@
-package ladsoft.com.popularmoviesapp.presenter;
+package ladsoft.com.popularmoviesapp.mvp.model;
 
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
@@ -12,28 +11,29 @@ import ladsoft.com.popularmoviesapp.api.TheMovieDbApi;
 import ladsoft.com.popularmoviesapp.api.TheMovieDbApiModule;
 import ladsoft.com.popularmoviesapp.api.parser.MovieReviewRequestResult;
 import ladsoft.com.popularmoviesapp.api.parser.MovieVideosRequestResult;
+import ladsoft.com.popularmoviesapp.core.mvp.model.MvpModel;
 import ladsoft.com.popularmoviesapp.data.MovieContract;
 import ladsoft.com.popularmoviesapp.model.Movie;
 import ladsoft.com.popularmoviesapp.model.MovieReview;
 import ladsoft.com.popularmoviesapp.model.MovieVideo;
+import ladsoft.com.popularmoviesapp.mvp.MovieDetailsMvp;
 import retrofit2.Call;
 import retrofit2.Response;
 
-import static ladsoft.com.popularmoviesapp.presenter.MovieDetailsMvp.ErrorType.FAVORITE_ERROR;
-import static ladsoft.com.popularmoviesapp.presenter.MovieDetailsMvp.ErrorType.REVIEW_DATA_LOAD_ERROR;
-import static ladsoft.com.popularmoviesapp.presenter.MovieDetailsMvp.ErrorType.VIDEO_DATA_LOAD_ERROR;
+import static ladsoft.com.popularmoviesapp.mvp.MovieDetailsMvp.ErrorType.FAVORITE_ERROR;
+import static ladsoft.com.popularmoviesapp.mvp.MovieDetailsMvp.ErrorType.REVIEW_DATA_LOAD_ERROR;
+import static ladsoft.com.popularmoviesapp.mvp.MovieDetailsMvp.ErrorType.VIDEO_DATA_LOAD_ERROR;
 
-public class MovieDetailsModel implements MovieDetailsMvp.Model<Movie> {
+public class MovieDetailsModel extends MvpModel<MovieDetailsMvp.Model.ModelCallback<Movie, MovieReview, MovieVideo>>
+        implements MovieDetailsMvp.Model<Movie, MovieReview, MovieVideo> {
     private static final String apiKey = BuildConfig.API_KEY;
     private final TheMovieDbApi api;
     private String TAG = MovieDetailsModel.class.getSimpleName();
-    private final MovieDetailsMvp.Presenter<Movie, MovieReview, MovieVideo> presenter;
 
     private final ContentResolver contentResolver;
 
-    public MovieDetailsModel(MovieDetailsMvp.Presenter presenter) {
-        this.presenter = presenter;
-        this.contentResolver = presenter.getContext().getContentResolver();
+    public MovieDetailsModel(ContentResolver contentResolver) {
+        this.contentResolver = contentResolver;
         this.api = TheMovieDbApiModule.providesApiAdapter();
     }
 
@@ -51,7 +51,7 @@ public class MovieDetailsModel implements MovieDetailsMvp.Model<Movie> {
         }
         cursor.close();
 
-        presenter.onMovieDetailsLoaded(movie);
+        getCallback().onMovieDetailsLoaded(movie);
     }
 
     @Override
@@ -99,9 +99,9 @@ public class MovieDetailsModel implements MovieDetailsMvp.Model<Movie> {
         movieRecord.close();
 
         if(result) {
-            presenter.onSaved();
+            getCallback().onSaved();
         } else {
-            presenter.onError(FAVORITE_ERROR);
+            getCallback().onError(FAVORITE_ERROR);
         }
 
     }
@@ -111,16 +111,16 @@ public class MovieDetailsModel implements MovieDetailsMvp.Model<Movie> {
         public void onResponse(Call<MovieReviewRequestResult> call, Response<MovieReviewRequestResult> response) {
             MovieReviewRequestResult movieReviews = response.body();
             if(movieReviews != null) {
-                presenter.onReviewsLoaded(movieReviews.getResults());
+                getCallback().onReviewsLoaded(movieReviews.getResults());
             } else {
-                presenter.onError(REVIEW_DATA_LOAD_ERROR);
+                getCallback().onError(REVIEW_DATA_LOAD_ERROR);
             }
         }
 
         @Override
         public void onFailure(Call<MovieReviewRequestResult> call, Throwable t) {
             Log.e(TAG, t.getLocalizedMessage(), t);
-            presenter.onError(REVIEW_DATA_LOAD_ERROR);
+            getCallback().onError(REVIEW_DATA_LOAD_ERROR);
         }
     };
 
@@ -129,16 +129,16 @@ public class MovieDetailsModel implements MovieDetailsMvp.Model<Movie> {
         public void onResponse(Call<MovieVideosRequestResult> call, Response<MovieVideosRequestResult> response) {
             MovieVideosRequestResult movieVideos = response.body();
             if(movieVideos != null) {
-                presenter.onVideosLoaded(movieVideos.getResults());
+                getCallback().onVideosLoaded(movieVideos.getResults());
             } else {
-                presenter.onError(VIDEO_DATA_LOAD_ERROR);
+                getCallback().onError(VIDEO_DATA_LOAD_ERROR);
             }
         }
 
         @Override
         public void onFailure(Call<MovieVideosRequestResult> call, Throwable t) {
             Log.e(TAG, t.getLocalizedMessage(), t);
-            presenter.onError(VIDEO_DATA_LOAD_ERROR);
+            getCallback().onError(VIDEO_DATA_LOAD_ERROR);
         }
     };
 }
