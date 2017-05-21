@@ -8,7 +8,6 @@ import android.util.Log;
 
 import ladsoft.com.popularmoviesapp.BuildConfig;
 import ladsoft.com.popularmoviesapp.api.TheMovieDbApi;
-import ladsoft.com.popularmoviesapp.api.TheMovieDbApiModule;
 import ladsoft.com.popularmoviesapp.api.parser.MovieReviewRequestResult;
 import ladsoft.com.popularmoviesapp.api.parser.MovieVideosRequestResult;
 import ladsoft.com.popularmoviesapp.core.mvp.model.MvpModel;
@@ -20,6 +19,7 @@ import ladsoft.com.popularmoviesapp.mvp.MovieDetailsMvp;
 import retrofit2.Call;
 import retrofit2.Response;
 
+import static ladsoft.com.popularmoviesapp.api.TheMovieDbApiFactoryKt.providesApiAdapter;
 import static ladsoft.com.popularmoviesapp.mvp.MovieDetailsMvp.ErrorType.FAVORITE_ERROR;
 import static ladsoft.com.popularmoviesapp.mvp.MovieDetailsMvp.ErrorType.REVIEW_DATA_LOAD_ERROR;
 import static ladsoft.com.popularmoviesapp.mvp.MovieDetailsMvp.ErrorType.VIDEO_DATA_LOAD_ERROR;
@@ -34,7 +34,7 @@ public class MovieDetailsModel extends MvpModel<MovieDetailsMvp.Model.ModelCallb
 
     public MovieDetailsModel(ContentResolver contentResolver) {
         this.contentResolver = contentResolver;
-        this.api = TheMovieDbApiModule.providesApiAdapter();
+        this.api = providesApiAdapter();
     }
 
     @Override

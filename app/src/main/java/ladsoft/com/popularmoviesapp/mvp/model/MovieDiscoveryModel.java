@@ -6,7 +6,6 @@ import android.util.Log;
 
 import ladsoft.com.popularmoviesapp.BuildConfig;
 import ladsoft.com.popularmoviesapp.api.TheMovieDbApi;
-import ladsoft.com.popularmoviesapp.api.TheMovieDbApiModule;
 import ladsoft.com.popularmoviesapp.api.parser.MovieSearchResult;
 import ladsoft.com.popularmoviesapp.core.mvp.model.MvpModel;
 import ladsoft.com.popularmoviesapp.model.Movie;
@@ -14,6 +13,7 @@ import ladsoft.com.popularmoviesapp.mvp.MovieDiscoveryMvp;
 import retrofit2.Call;
 import retrofit2.Response;
 
+import static ladsoft.com.popularmoviesapp.api.TheMovieDbApiFactoryKt.providesApiAdapter;
 import static ladsoft.com.popularmoviesapp.mvp.MovieDetailsMvp.ErrorType.DATA_LOAD_ERROR;
 import static ladsoft.com.popularmoviesapp.mvp.MovieDiscoveryMvp.SORT_TYPE_MOST_POPULAR;
 import static ladsoft.com.popularmoviesapp.mvp.MovieDiscoveryMvp.SORT_TYPE_TOP_RATED;
@@ -28,7 +28,7 @@ public class MovieDiscoveryModel extends MvpModel<MovieDiscoveryMvp.Model.ModelC
 
     public MovieDiscoveryModel(ContentResolver contentResolver) {
         this.contentResolver = contentResolver;
-        this.api = TheMovieDbApiModule.providesApiAdapter();
+        this.api = providesApiAdapter();
     }
 
     @Override
