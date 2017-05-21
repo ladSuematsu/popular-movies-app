@@ -165,6 +165,7 @@ public class MovieDiscoveryFragment extends Fragment implements MovieDiscoveryMv
     public void showFavorites() {
         Log.i(TAG, "Swapping adapter list with favorites adapter");
         binding.movieDiscoveryList.setAdapter(favoritesAdapter);
+        loader.forceLoad();
     }
 
     @Override
