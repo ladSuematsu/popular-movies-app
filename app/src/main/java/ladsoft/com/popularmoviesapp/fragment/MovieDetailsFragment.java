@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -186,16 +188,16 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsMvp.Vi
     }
 
     @Override
-    public void refreshReviews(List<MovieReview> reviews) {
-        movieReviewsAdapter.setDataSource(reviews);
+    public void refreshReviews(@NotNull List<? extends MovieReview> reviews) {
+        movieReviewsAdapter.setDataSource((List<MovieReview>) reviews);
         showReviewsEmptyMessage(movieReviewsAdapter.getItemCount() < 1);
         showReviewsLoadError(false);
 
     }
 
     @Override
-    public void refreshVideos(List<MovieVideo> videos) {
-        movieVideosAdapter.setDataSource(videos);
+    public void refreshVideos(@NotNull List<? extends MovieVideo> videos) {
+        movieVideosAdapter.setDataSource((List<MovieVideo>) videos);
         showVideosEmptyMessage(movieVideosAdapter.getItemCount() < 1);
         showVideosLoadError(false);
 
